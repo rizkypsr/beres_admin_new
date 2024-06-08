@@ -1,0 +1,16 @@
+[17-Jan-2024 12:57:14 Asia/Jakarta] PHP Warning:  require(/home1/beresmyi/public_html/beresnew/../beresnew/vendor/autoload.php): Failed to open stream: No such file or directory in /home1/beresmyi/public_html/beresnew/index.php on line 34
+[17-Jan-2024 12:57:14 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home1/beresmyi/public_html/beresnew/../beresnew/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home1/beresmyi/public_html/beresnew/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/beresmyi/public_html/beresnew/index.php on line 34
+[17-Jan-2024 13:01:48 Asia/Jakarta] PHP Warning:  require(/home1/beresmyi/public_html/beresnew/../beresnew/vendor/autoload.php): Failed to open stream: No such file or directory in /home1/beresmyi/public_html/beresnew/index.php on line 34
+[17-Jan-2024 13:01:48 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home1/beresmyi/public_html/beresnew/../beresnew/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home1/beresmyi/public_html/beresnew/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/beresmyi/public_html/beresnew/index.php on line 34
+[17-Jan-2024 07:31:10 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php on line 544
+[17-Jan-2024 07:32:03 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/bacon/bacon-qr-code/src/Encoder/MaskUtil.php on line 90
+[17-Jan-2024 07:33:32 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/bacon/bacon-qr-code/src/Encoder/ByteMatrix.php on line 107
+[17-Jan-2024 07:35:24 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/bacon/bacon-qr-code/src/Encoder/ByteMatrix.php on line 59
+[17-Jan-2024 07:36:27 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/bacon/bacon-qr-code/src/Encoder/MatrixUtil.php on line 493
+[17-Jan-2024 07:36:34 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home1/beresmyi/public_html/beres/vendor/bacon/bacon-qr-code/src/Encoder/Encoder.php on line 263
