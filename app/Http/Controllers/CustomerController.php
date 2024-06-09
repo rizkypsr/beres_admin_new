@@ -8,12 +8,11 @@ use App\Exports\tokoexport;
 use App\Imports\CustomerImport;
 use App\Imports\TokoImport;
 use App\Models\Customer;
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\topup;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -29,27 +28,17 @@ class CustomerController extends Controller
     {
 
         if (auth()->user()->role == 'superadmin') {
-            $listKecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $listKecamatan = Kecamatan::where('status_kecamatan', 0)->get();
 
             return $dataTable->render('customer.customer', compact('listKecamatan'));
         }
 
-        // if (auth()->user()->role == 'superadmin') {
-        //     $customer = Customer::with('kecamatan')->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-        //     $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+        if (auth()->user()->role == 'admin') {
+            $user = User::find(auth()->user()->id);
+            $listKecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
 
-        //     return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
-        // }
-        // if (auth()->user()->role == 'admin') {
-        //     $user = User::find(auth()->user()->id);
-        //     $customer = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-        //     $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
-
-        //     return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
-        // }
-
-        // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();
-
+            return $dataTable->with('user', $user)->render('customer.customer', compact('listKecamatan'));
+        }
     }
 
     public function addcustomer(Request $request)
