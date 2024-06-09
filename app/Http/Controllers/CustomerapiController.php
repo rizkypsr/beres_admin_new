@@ -11,7 +11,7 @@ class CustomerapiController extends Controller
     public function index(Request $request)
     {
 
-        $customer = customer::where('id_customer', $request->id_customer)->where('customer_is_delete', 0)->first();
+        $customer = Customer::where('id_customer', $request->id_customer)->where('customer_is_delete', 0)->first();
         if ($customer->customer_is_delete == 1) {
             return response()->json([
                 'status' => false,

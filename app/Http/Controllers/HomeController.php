@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\topup;
 use App\Models\transaksijs;
 use App\Models\transaksippob;
-use App\Models\transfer;
+use App\Models\Transfer;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -100,7 +100,7 @@ class HomeController extends Controller
                 }
             }
 
-            $transfer = transfer::select('tanggal', 'nominal')->whereYear('tanggal', Carbon::now()->format('Y'))->get()->groupBy(function ($daka) {
+            $transfer = Transfer::select('tanggal', 'nominal')->whereYear('tanggal', Carbon::now()->format('Y'))->get()->groupBy(function ($daka) {
                 return Carbon::parse($daka->tanggal)->format('m');
             });
             $userb = [];
@@ -157,8 +157,8 @@ class HomeController extends Controller
 
         if (auth()->user()->role == 'admin') {
             $usser = User::find(auth()->user()->id);
-            $customerbar = customer::where('role_customer', 'customer')->where('id_kecamatan_customer', $usser->id_kecamatan_user)->count();
-            $customertoko = customer::where('role_customer', 'toko')->where('id_kecamatan_customer', $usser->id_kecamatan_user)->count();
+            $customerbar = Customer::where('role_customer', 'customer')->where('id_kecamatan_customer', $usser->id_kecamatan_user)->count();
+            $customertoko = Customer::where('role_customer', 'toko')->where('id_kecamatan_customer', $usser->id_kecamatan_user)->count();
 
             $topup = topup::select('tanggal_topup', 'nominal_topup')->where('id_kecamatan_topup', $usser->id_kecamatan_user)->whereYear('tanggal_topup', Carbon::now()->format('Y'))->get()->groupBy(function ($dat) {
                 return Carbon::parse($dat->tanggal_topup)->format('m');
@@ -204,7 +204,7 @@ class HomeController extends Controller
                 }
             }
 
-            $transfer = transfer::select('tanggal', 'nominal')->where('id_kecamatan_transfer', $usser->id_kecamatan_user)->whereYear('tanggal', Carbon::now()->format('Y'))->get()->groupBy(function ($daka) {
+            $transfer = Transfer::select('tanggal', 'nominal')->where('id_kecamatan_transfer', $usser->id_kecamatan_user)->whereYear('tanggal', Carbon::now()->format('Y'))->get()->groupBy(function ($daka) {
                 return Carbon::parse($daka->tanggal)->format('m');
             });
             $userb = [];

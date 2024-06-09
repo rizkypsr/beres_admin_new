@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\transaksijs;
 use App\Models\transaksippob;
-use App\Models\transfer;
+use App\Models\Transfer;
 
 class logController extends Controller
 {
@@ -12,8 +12,8 @@ class logController extends Controller
     {
         $tpp = transaksippob::with('customer')->where('customer_ppob', $id)->get();
         $tjs = transaksijs::with('kecamatan')->with('customer')->with('produkjs')->where('id_cs_js', $id)->get();
-        $transfer = transfer::with('customer')->where('pengirim', $id)->get();
-        $transfer_penerima = transfer::with('customer')->where('penerima', $id)->get();
+        $transfer = Transfer::with('customer')->where('pengirim', $id)->get();
+        $transfer_penerima = Transfer::with('customer')->where('penerima', $id)->get();
 
         if ($type == 'ppob') {
             return response()->json([

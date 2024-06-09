@@ -30,11 +30,11 @@ class bayartoko extends Model
 
     public function customer()
     {
-        return $this->belongsTo(customer::class, 'pengirim_bayar', 'id_customer')->withTrashed();
+        return $this->belongsTo(Customer::class, 'pengirim_bayar', 'id_customer')->withTrashed();
     }
 
     public function customertoko()
     {
-        return $this->belongsTo(customer::class, 'toko_bayar', 'id_customer')->withTrashed();
+        return $this->belongsTo(Customer::class, 'toko_bayar', 'id_customer')->withTrashed();
     }
 }

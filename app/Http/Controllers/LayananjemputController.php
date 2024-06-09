@@ -21,7 +21,7 @@ class LayananjemputController extends Controller
         if (auth()->user()->role == 'superadmin') {
             $lj = layananjemput::with('kecamatan')->with('customer')->get();
             $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
-            $customer = customer::where('customer_is_delete', 0)->get();
+            $customer = Customer::where('customer_is_delete', 0)->get();
 
             return view('layananjemput.layananjemput')->with('lj', $lj)->with('kecamatan', $kecamatan)->with('customer', $customer);
         }
@@ -29,7 +29,7 @@ class LayananjemputController extends Controller
             $user = User::find(auth()->user()->id);
             $lj = layananjemput::with('kecamatan')->with('customer')->where('kecamatan_layanan', $user->id_kecamatan_user)->get();
             $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
-            $customer = customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
+            $customer = Customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
 
             return view('layananjemput.layananjemput')->with('lj', $lj)->with('kecamatan', $kecamatan)->with('customer', $customer);
         }
