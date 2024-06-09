@@ -22,16 +22,15 @@ class layananjemput extends Model
         'no_hp_layanan',
         'jenis_sampah_layanan',
         'status_layanan',
-
     ];
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'kecamatan_layanan', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_layanan', 'id_kecamatan');
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'nama_layanan', 'id_customer');
+        return $this->belongsTo(Customer::class, 'nama_layanan', 'id_customer')->withTrashed();
     }
 }

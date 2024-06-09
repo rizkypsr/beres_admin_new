@@ -14,7 +14,6 @@ class LayananjemputapiController extends Controller
 
         $lj = layananjemput::with('kecamatan')->get();
 
-        // $kecamatan = kecamatan::all();
         return response()->json($lj);
     }
 
@@ -38,7 +37,6 @@ class LayananjemputapiController extends Controller
             ], 400);
         }
         // $customer = customer::find($request->id_customer);
-        // $kecamatan = kecamatan::find($request->id_kecamatan);
         $lj = new layananjemput;
         $lj->kecamatan_layanan = $request->kecamatan_layanan;
         if ($lj->kecamatan_layanan == 0) {

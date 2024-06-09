@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\topup;
 use App\Models\transaksi;
 use App\Models\User;
@@ -22,14 +22,14 @@ class TokoController extends Controller
     {
         if (auth()->user()->role == 'superadmin') {
             $toko = Customer::with('kecamatan')->where('role_customer', 'toko')->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
 
             return view('toko.toko')->with('toko', $toko)->with('kecamatan', $kecamatan);
         }
         if (auth()->user()->role == 'admin') {
             $user = User::find(auth()->user()->id);
             $toko = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'toko')->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user);
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user);
 
             return view('toko.toko')->with('toko', $toko)->with('kecamatan', $kecamatan);
         }

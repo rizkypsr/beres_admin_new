@@ -25,16 +25,16 @@ class bayartoko extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'id_kecamatan_bayar', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan_bayar', 'id_kecamatan');
     }
 
     public function customer()
     {
-        return $this->belongsTo(customer::class, 'pengirim_bayar', 'id_customer');
+        return $this->belongsTo(Customer::class, 'pengirim_bayar', 'id_customer')->withTrashed();
     }
 
     public function customertoko()
     {
-        return $this->belongsTo(customer::class, 'toko_bayar', 'id_customer');
+        return $this->belongsTo(Customer::class, 'toko_bayar', 'id_customer')->withTrashed();
     }
 }

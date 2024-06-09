@@ -38,7 +38,7 @@ class transfer extends Command
      */
     public function handle()
     {
-        transfer::where('created_at', '<', Carbon::now())->each(function ($transfer) {
+        Transfer::where('created_at', '<', Carbon::now())->each(function ($transfer) {
             $transfer->delete();
         });
     }

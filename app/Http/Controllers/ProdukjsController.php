@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\produkjs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +26,7 @@ class ProdukjsController extends Controller
                 ->with('kecamatan')
                 ->get();
 
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->whereHas('kota', function ($query) {
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->whereHas('kota', function ($query) {
                 $query->where('kota_is_delete', 0);
             })->get();
         }
@@ -36,7 +36,7 @@ class ProdukjsController extends Controller
                 ->where('id_kecamatan', auth()->user()->id_kecamatan_user)
                 ->get();
 
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->where('id_kecamatan', auth()->user()->id_kecamatan_user)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->where('id_kecamatan', auth()->user()->id_kecamatan_user)->get();
         }
 
         // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();

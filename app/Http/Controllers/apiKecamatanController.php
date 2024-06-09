@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 
 class apiKecamatanController extends Controller
 {
     public function index()
     {
-        $kecamatan = kecamatan::with('kota')->where('status_kecamatan', 0)->get();
+        $kecamatan = Kecamatan::with('kota')->where('status_kecamatan', 0)->get();
 
         return response()->json([
             'status' => 'success',

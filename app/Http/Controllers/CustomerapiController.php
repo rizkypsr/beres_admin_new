@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerapiController extends Controller
@@ -12,7 +11,7 @@ class CustomerapiController extends Controller
     public function index(Request $request)
     {
 
-        $customer = customer::where('id_customer', $request->id_customer)->where('customer_is_delete', 0)->first();
+        $customer = Customer::where('id_customer', $request->id_customer)->where('customer_is_delete', 0)->first();
         if ($customer->customer_is_delete == 1) {
             return response()->json([
                 'status' => false,
@@ -35,8 +34,6 @@ class CustomerapiController extends Controller
             ]);
         }
 
-        // $kecamatan = kecamatan::all();
-        // $tokenResult = $customer->createToken('token-auth')->plainTextToken;
         return response()->json([
             'status' => 'success',
             'msg' => 'login successfully',

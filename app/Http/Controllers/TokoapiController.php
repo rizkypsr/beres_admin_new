@@ -11,7 +11,6 @@ class TokoapiController extends Controller
 
         $toko = Customer::with('kecamatan')->get();
 
-        // $kecamatan = kecamatan::all();
         return response()->json($toko);
     }
 }

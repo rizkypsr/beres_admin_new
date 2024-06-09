@@ -19,7 +19,7 @@ class TransferController extends Controller
 
         if (auth()->user()->role == 'admin') {
             $user = User::find(auth()->user()->id);
-            $transfer = transfer::with('kecamatan')->with('customer', 'customerpenerima')->where('id_kecamatan_transfer', $user->id_kecamatan_user)->get();
+            $transfer = Transfer::with('kecamatan')->with('customer', 'customerpenerima')->where('id_kecamatan_transfer', $user->id_kecamatan_user)->get();
 
             return view('transfer.transfer')->with('transfer', $transfer);
         }

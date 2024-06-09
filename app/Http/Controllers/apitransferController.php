@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\transfer;
+use App\Models\Transfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +21,7 @@ class apitransferController extends Controller
             ]);
         }
 
-        $transfer = transfer::with('customer')->where('pengirim', $id)->get();
+        $transfer = Transfer::with('customer')->where('pengirim', $id)->get();
 
         // return view('ppob.ppob')->with('ppob',$ppob);
         return response()->json([
@@ -46,7 +46,7 @@ class apitransferController extends Controller
             ], 400);
         }
 
-        $transfer = new transfer;
+        $transfer = new Transfer;
         $customerpengirim = Customer::find($id);
         if ($customerpengirim->saldo_customer < $request->nominal) {
             return response()->json([
@@ -62,7 +62,7 @@ class apitransferController extends Controller
                 'data' => null,
             ], 400);
         }
-        $customerpenerima = customer::find($request->penerima);
+        $customerpenerima = Customer::find($request->penerima);
         if ($customerpenerima == null) {
             return response()->json([
                 'status' => 'failed',

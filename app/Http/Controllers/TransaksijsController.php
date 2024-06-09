@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\transaksijsexport;
 use App\Models\Customer;
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\produkjs;
 use App\Models\topup;
 use App\Models\transaksijs;
@@ -29,7 +29,7 @@ class TransaksijsController extends Controller
     {
         if (auth()->user()->role == 'superadmin') {
             $tjs = transaksijs::with('kecamatan')->with('customer')->with('produkjs')->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
             $produkjs = produkjs::where('js_is_delete', 0)->get();
             $customer = Customer::where('customer_is_delete', 0)->get();
 
@@ -40,7 +40,7 @@ class TransaksijsController extends Controller
             $user = User::find(auth()->user()->id);
             $tjs = transaksijs::with('kecamatan')->with('customer')->where('id_kc_js', $user->id_kecamatan_user)->get();
             $produkjs = produkjs::where('js_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
             $customer = Customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
 
             return view('transaksijs.logtransaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);
@@ -51,7 +51,7 @@ class TransaksijsController extends Controller
     {
         if (auth()->user()->role == 'superadmin') {
             $tjs = transaksijs::with('kecamatan')->with('customer')->with('produkjs')->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
             $produkjs = produkjs::where('js_is_delete', 0)->get();
             $customer = Customer::where('customer_is_delete', 0)->get();
 
@@ -62,7 +62,7 @@ class TransaksijsController extends Controller
             $user = User::find(auth()->user()->id);
             $tjs = transaksijs::with('kecamatan')->with('customer')->where('id_kc_js', $user->id_kecamatan_user)->get();
             $produkjs = produkjs::where('js_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
             $customer = Customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
 
             return view('transaksijs.transaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);

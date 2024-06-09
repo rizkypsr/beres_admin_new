@@ -18,7 +18,7 @@ class UserChallenge extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id_customer');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id_customer')->withTrashed();
     }
 
     public function user_challenge_images()

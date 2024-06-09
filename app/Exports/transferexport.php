@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\transfer;
+use App\Models\Transfer;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class transferexport implements FromCollection
@@ -12,6 +12,6 @@ class transferexport implements FromCollection
      */
     public function collection()
     {
-        return transfer::all();
+        return Transfer::all();
     }
 }

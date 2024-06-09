@@ -25,6 +25,6 @@ class umkm extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'id_kecamatan_umkm', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan_umkm', 'id_kecamatan');
     }
 }
