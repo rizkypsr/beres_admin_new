@@ -27,11 +27,11 @@ class layananjemput extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(Kecamatan::class, 'kecamatan_layanan', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_layanan', 'id_kecamatan')->withTrashed();
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'nama_layanan', 'id_customer');
+        return $this->belongsTo(Customer::class, 'nama_layanan', 'id_customer')->withTrashed();
     }
 }

@@ -30,6 +30,6 @@ class transaksi extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'id_customer_transaksi', 'nik_customer');
+        return $this->belongsTo(Customer::class, 'id_customer_transaksi', 'nik_customer')->withTrashed();
     }
 }

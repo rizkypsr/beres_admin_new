@@ -27,7 +27,7 @@ class transaksippob extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_ppob', 'id_customer');
+        return $this->belongsTo(Customer::class, 'customer_ppob', 'id_customer')->withTrashed();
     }
 
     public function ppob()
