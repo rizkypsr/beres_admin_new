@@ -22,6 +22,6 @@ class kota extends Model
 
     public function kecamatan()
     {
-        return $this->hasOne(kecamatan::class, 'id_kota_kecamatan');
+        return $this->hasOne(Kecamatan::class, 'id_kota_kecamatan');
     }
 }

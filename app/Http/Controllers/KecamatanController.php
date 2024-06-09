@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\kota;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class KecamatanController extends Controller
 
         $kota = kota::find($id);
 
-        $kecamatan = kecamatan::where('id_kota_kecamatan', $kota->id_kota)->where('status_kecamatan', 0)->with('kota')->get();
+        $kecamatan = Kecamatan::where('id_kota_kecamatan', $kota->id_kota)->where('status_kecamatan', 0)->with('kota')->get();
 
         return view('kota.kecamatan')->with('kecamatan', $kecamatan)->with('kota', $kota);
     }
@@ -26,7 +26,7 @@ class KecamatanController extends Controller
     public function addkecamatan(Request $request, $id)
     {
 
-        $kecamatan = new kecamatan;
+        $kecamatan = new Kecamatan;
         $kecamatan->id_kota_kecamatan = $request->input('id_kota_kecamatan');
         $kecamatan->nama_kecamatan = $request->input('nama_kecamatan');
         $kecamatan->save();
@@ -37,7 +37,7 @@ class KecamatanController extends Controller
     public function updatekecamatan(Request $request, $id)
     {
 
-        $kecamatan = kecamatan::find($id);
+        $kecamatan = Kecamatan::find($id);
         $kecamatan->id_kota_kecamatan = $request->input('id_kota_kecamatan');
         $kecamatan->nama_kecamatan = $request->input('nama_kecamatan');
         $kecamatan->save();
@@ -51,8 +51,7 @@ class KecamatanController extends Controller
 
         // $kota = kota::find($id);
         // $kota_id = $kota->kecamatan->id_kota_kecamatan;
-        // $kecamatan = kecamatan::where('id_kecamatan',$kota_id)->get();
-        $kecamatan = kecamatan::find($id);
+        $kecamatan = Kecamatan::find($id);
         $kecamatan->status_kecamatan = 1;
         $kecamatan->update();
         // $kota = kota::where('id_kota',$kecamatan->id_kota_kecamatan)->get();

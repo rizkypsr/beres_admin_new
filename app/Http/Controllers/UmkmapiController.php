@@ -10,7 +10,6 @@ class UmkmapiController extends Controller
     {
 
         $umkm = umkm::with('kecamatan')->where('id_kecamatan_umkm', $id)->where('umkm_is_delete', 0)->get();
-        // $kecamatan = kecamatan::all();
 
         return response()->json([
             'success' => true,

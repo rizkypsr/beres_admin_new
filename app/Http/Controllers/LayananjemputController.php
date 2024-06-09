@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\layananjemput;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,7 +20,7 @@ class LayananjemputController extends Controller
     {
         if (auth()->user()->role == 'superadmin') {
             $lj = layananjemput::with('kecamatan')->with('customer')->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
             $customer = customer::where('customer_is_delete', 0)->get();
 
             return view('layananjemput.layananjemput')->with('lj', $lj)->with('kecamatan', $kecamatan)->with('customer', $customer);
@@ -28,7 +28,7 @@ class LayananjemputController extends Controller
         if (auth()->user()->role == 'admin') {
             $user = User::find(auth()->user()->id);
             $lj = layananjemput::with('kecamatan')->with('customer')->where('kecamatan_layanan', $user->id_kecamatan_user)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
             $customer = customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
 
             return view('layananjemput.layananjemput')->with('lj', $lj)->with('kecamatan', $kecamatan)->with('customer', $customer);

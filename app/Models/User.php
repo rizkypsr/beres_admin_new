@@ -45,6 +45,6 @@ class User extends Authenticatable
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'id_kecamatan_user', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan_user', 'id_kecamatan');
     }
 }

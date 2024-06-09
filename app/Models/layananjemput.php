@@ -27,7 +27,7 @@ class layananjemput extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'kecamatan_layanan', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_layanan', 'id_kecamatan');
     }
 
     public function customer()

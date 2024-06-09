@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\KecamatanExport;
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\kota;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -50,8 +50,7 @@ class KotaController extends Controller
 
         $ke = $kota->kecamatan->id_kota_kecamatan;
 
-        // $kecamatan = kecamatan::find($ke);
-        $kecamatan = kecamatan::where('id_kota_kecamatan', $kota->id_kota)->get();
+        $kecamatan = Kecamatan::where('id_kota_kecamatan', $kota->id_kota)->get();
         foreach ($kecamatan as $key => $value) {
             $value->status_kecamatan = 1;
             $value->save();

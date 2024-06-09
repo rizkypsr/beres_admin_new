@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\produkumkm;
 use App\Models\umkm;
 use App\Models\User;
@@ -20,7 +20,7 @@ class UmkmController extends Controller
     {
         if (auth()->user()->role == 'superadmin') {
             $umkm = umkm::with('kecamatan')->where('umkm_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
 
             return view('umkm.umkm')->with('umkm', $umkm)->with('kecamatan', $kecamatan);
         }
@@ -28,7 +28,7 @@ class UmkmController extends Controller
         if (auth()->user()->role == 'admin') {
             $user = User::find(auth()->user()->id);
             $umkm = umkm::with('kecamatan')->where('umkm_is_delete', 0)->where('id_kecamatan_umkm', $user->id_kecamatan_user)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
 
             return view('umkm.umkm')->with('umkm', $umkm)->with('kecamatan', $kecamatan);
         }

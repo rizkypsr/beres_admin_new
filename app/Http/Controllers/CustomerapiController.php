@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerapiController extends Controller
@@ -35,8 +34,6 @@ class CustomerapiController extends Controller
             ]);
         }
 
-        // $kecamatan = kecamatan::all();
-        // $tokenResult = $customer->createToken('token-auth')->plainTextToken;
         return response()->json([
             'status' => 'success',
             'msg' => 'login successfully',

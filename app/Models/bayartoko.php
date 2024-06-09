@@ -25,7 +25,7 @@ class bayartoko extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(kecamatan::class, 'id_kecamatan_bayar', 'id_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan_bayar', 'id_kecamatan');
     }
 
     public function customer()

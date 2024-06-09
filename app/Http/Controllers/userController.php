@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kecamatan;
+use App\Models\Kecamatan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +20,7 @@ class userController extends Controller
 
         $user = User::with('kecamatan')->get();
 
-        $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+        $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
 
         return view('user.user')->with('user', $user)->with('kecamatan', $kecamatan);
     }
