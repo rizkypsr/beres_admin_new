@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CustomersDataTable;
 use App\Exports\customerexport;
 use App\Exports\tokoexport;
 use App\Imports\CustomerImport;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
@@ -23,21 +25,28 @@ class CustomerController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(CustomersDataTable $dataTable)
     {
+
         if (auth()->user()->role == 'superadmin') {
-            $customer = Customer::with('kecamatan')->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+            $listKecamatan = kecamatan::where('status_kecamatan', 0)->get();
 
-            return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
+            return $dataTable->render('customer.customer', compact('listKecamatan'));
         }
-        if (auth()->user()->role == 'admin') {
-            $user = User::find(auth()->user()->id);
-            $customer = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
 
-            return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
-        }
+        // if (auth()->user()->role == 'superadmin') {
+        //     $customer = Customer::with('kecamatan')->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
+        //     $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
+
+        //     return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
+        // }
+        // if (auth()->user()->role == 'admin') {
+        //     $user = User::find(auth()->user()->id);
+        //     $customer = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
+        //     $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
+
+        //     return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
+        // }
 
         // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();
 
@@ -45,8 +54,6 @@ class CustomerController extends Controller
 
     public function addcustomer(Request $request)
     {
-        // add validation
-
         try {
             $request->validate([
                 'id_customer' => 'required|unique:customer',
@@ -119,21 +126,50 @@ class CustomerController extends Controller
 
     public function updatecustomer(Request $request, $id)
     {
+        $rules = [
+            'id_kecamatan_customer' => 'required',
+            'nama_customer' => 'required',
+            'alamat_customer' => 'required',
+            'pin_customer' => 'nullable',
+            'no_hp_customer' => 'required',
+            'tempat_lahir' => 'nullable',
+            'tgl_lahir' => 'nullable',
+        ];
 
-        $customer = Customer::find($id);
-        // $customer->id_customer = $request->input('id_customer');
-        $customer->id_kecamatan_customer = $request->input('id_kecamatan_customer');
-        $customer->nama = $request->input('nama_customer');
-        $customer->alamat_customer = $request->input('alamat_customer');
-        // $customer->saldo_customer = $request->input('saldo_customer');
-        $customer->pin_customer = Hash::make($request->pin_customer);
-        $customer->no_hp_customer = $request->input('no_hp_customer');
-        $customer->role_customer = 'customer';
-        $customer->tempat_lahir = $request->input('tempat_lahir');
-        $customer->tgl_lahir = $request->input('tgl_lahir');
-        $customer->save();
+        $validator = Validator::make($request->all(), $rules);
 
-        return redirect('/customer')->with('success', 'Berhasil Update customer');
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('warning', 'Periksa kembali data anda');
+        }
+
+        try {
+            $customer = Customer::findOrFail($id);
+
+            $updateData = [
+                'id_kecamatan_customer' => $request->id_kecamatan_customer,
+                'nama' => $request->nama_customer,
+                'alamat_customer' => $request->alamat_customer,
+                'no_hp_customer' => $request->no_hp_customer,
+                'role_customer' => 'customer',
+                'customer_is_delete' => 0,
+            ];
+
+            if (! is_null($request->pin_customer)) {
+                $updateData['pin_customer'] = Hash::make($request->pin_customer);
+            }
+            if (! is_null($request->tempat_lahir)) {
+                $updateData['tempat_lahir'] = $request->tempat_lahir;
+            }
+            if (! is_null($request->tgl_lahir)) {
+                $updateData['tgl_lahir'] = $request->tgl_lahir;
+            }
+
+            $customer->update($updateData);
+
+            return redirect('/customer')->with('success', 'Berhasil Mengubah Customer');
+        } catch (\Exception $e) {
+            return redirect('/customer')->with('warning', 'Gagal Update Customer: '.$e->getMessage());
+        }
     }
 
     public function deletecustomer($id)

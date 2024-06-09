@@ -12,28 +12,21 @@
                 <form role="form" action="/updatecustomer/{{ $customer->id_customer }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
-
-
                     <div class="box-body">
-
-                        {{-- <div class="form-group">
-                  <label for="exampleInputEmail1" >Id Anggota</label> 
-                  <input type="number" class="form-control" name="id_customer" required autocomplete="id_customer" value="{{$customer->id_customer}}" >
-                </div> --}}
                         <div class="form-group">
                             <label for="">Nama Kecamatan</label>
                             <select class="form-control" name="id_kecamatan_customer" id="id_kecamatan_customer"
                                 required>
                                 <option selected hidden value="{{ $customer->kecamatan->id_kecamatan }}">
                                     {{ $customer->kecamatan->nama_kecamatan }}</option>
-                                @foreach ($kecamatan as $item)
+                                @foreach ($listKecamatan as $item)
                                     <option value="{{ $item->id_kecamatan }}">{{ $item->nama_kecamatan }} </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Customer</label>
-                            <input type="text" class="form-control" name="nama_customer" required
+                            <label for="nama" class="text-left d-block">Nama Customer</label>
+                            <input id="nama" type="text" class="form-control" name="nama_customer" required
                                 autocomplete="nama_customer" value="{{ $customer->nama }}">
                         </div>
                         <div class="form-group">
@@ -43,8 +36,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Pin Customer (max 6 karakter)</label>
-                            <input type="password" class="form-control" name="pin_customer" maxlength="6" required
-                                autocomplete="pin_customer" value="{{ $customer->pin_customer }}">
+                            <input type="password" class="form-control" name="pin_customer" maxlength="6"
+                                autocomplete="pin_customer">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">No Handphone</label>
@@ -55,17 +48,14 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tempat Lahir</label>
                             <input type="text" class="form-control" name="tempat_lahir"
-                                value="{{ $customer->tempat_lahir }}" required>
+                                value="{{ $customer->tempat_lahir }}">
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tanggal Lahir</label>
                             <input type="date" class="form-control" name="tgl_lahir"
-                                value="{{ $customer->tgl_lahir }}" required>
+                                value="{{ $customer->tgl_lahir }}">
                         </div>
-
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-bs-dismiss="modal">Close</button>
@@ -73,7 +63,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>

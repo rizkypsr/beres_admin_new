@@ -11,10 +11,7 @@
             <div class="modal-body">
                 <form role="form" action="/addcustomer" method="POST" enctype="multipart/form-data">
                     @csrf
-
-
                     <div class="box-body">
-
                         <div class="form-group">
                             <label for="exampleInputEmail1">Id Anggota</label>
                             <input type="number" class="form-control" name="id_customer" required
@@ -25,7 +22,7 @@
                             <select class="form-control" name="id_kecamatan_customer" id="id_kecamatan_customer"
                                 required>
                                 <option selected hidden disabled value=""> Pilih Kecamatan</option>
-                                @foreach ($kecamatan as $item)
+                                @foreach ($listKecamatan as $item)
                                     <option value="{{ $item->id_kecamatan }}">{{ $item->nama_kecamatan }} </option>
                                 @endforeach
                             </select>
