@@ -34,6 +34,13 @@ class CustomerController extends Controller
             return $dataTable->render('customer.customer', compact('listKecamatan'));
         }
 
+        if (auth()->user()->role == 'admin') {
+            $user = User::find(auth()->user()->id);
+            $listKecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
+
+            return $dataTable->with('user', $user)->render('customer.customer', compact('listKecamatan'));
+        }
+
         // if (auth()->user()->role == 'superadmin') {
         //     $customer = Customer::with('kecamatan')->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
         //     $kecamatan = kecamatan::where('status_kecamatan', 0)->get();

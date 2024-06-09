@@ -41,7 +41,17 @@ class CustomersDataTable extends DataTable
      */
     public function query(Customer $model): QueryBuilder
     {
-        return $model->with('kecamatan')->orderBy('created_at', 'desc');
+        $user = $this->user;
+
+        if (auth()->user()->role == 'superadmin') {
+            return $model->with('kecamatan')->orderBy('created_at', 'desc');
+        }
+
+        // if role is admin
+        return $model->with('kecamatan')
+            ->where('id_kecamatan_customer', $user->id_kecamatan_user)
+            ->where('role_customer', 'customer')
+            ->orderBy('created_at', 'desc');
     }
 
     /**
