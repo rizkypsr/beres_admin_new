@@ -94,10 +94,6 @@ Route::get('/total_jualsampah', [App\Http\Controllers\TransaksijsController::cla
 Route::get('/total_jualsampah_diproses', [App\Http\Controllers\TransaksijsController::class, 'totaljualsampahdiproses']);
 Route::get('/jualsampahexport', [App\Http\Controllers\TransaksijsController::class, 'export']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/ppob', [App\Http\Controllers\PpobController::class, 'index']);
 Route::post('/addppob', [App\Http\Controllers\PpobController::class, 'addppob']);
 Route::post('/updateppob/{id}', [App\Http\Controllers\PpobController::class, 'updateppob']);
@@ -117,10 +113,6 @@ Route::get('/selesaitpp/{id}', [App\Http\Controllers\TransaksippobController::cl
 Route::get('/total_ppob', [App\Http\Controllers\TransaksippobController::class, 'totalppob']);
 Route::get('/total_ppob_diproses', [App\Http\Controllers\TransaksippobController::class, 'totalppobdiproses']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/lj', [App\Http\Controllers\LayananjemputController::class, 'index']);
 Route::post('/addlj', [App\Http\Controllers\LayananjemputController::class, 'addlj']);
 Route::post('/updatelj/{id}', [App\Http\Controllers\LayananjemputController::class, 'updatelj']);
@@ -130,10 +122,6 @@ Route::get('/selesailj/{id}', [App\Http\Controllers\LayananjemputController::cla
 Route::get('/total_layanan', [App\Http\Controllers\LayananjemputController::class, 'totallayanan']);
 Route::get('/total_layanan_diproses', [App\Http\Controllers\LayananjemputController::class, 'totallayanandiproses']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/qurban', [App\Http\Controllers\QurbansampahController::class, 'index']);
 Route::post('/addqurban', [App\Http\Controllers\QurbansampahController::class, 'addqurban']);
 Route::post('/updatequrban/{id}', [App\Http\Controllers\QurbansampahController::class, 'updatequrban']);
@@ -150,10 +138,6 @@ Route::get('/accshare/{id}', [App\Http\Controllers\ShareController::class, 'accs
 // Route::post('/updateinfo/{id}', [App\Http\Controllers\InfoController::class, 'updateinfo']);
 // Route::delete('/deleteinfo/{id}', [App\Http\Controllers\InfoController::class, 'deleteinfo']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/banner', [App\Http\Controllers\bannerController::class, 'index']);
 Route::post('/addbanner', [App\Http\Controllers\bannerController::class, 'addbanner']);
 Route::post('/updateinfo/{id}', [App\Http\Controllers\bannerController::class, 'updatebanner']);
@@ -171,10 +155,6 @@ Route::get('/bayartokoexport', [App\Http\Controllers\BayartokoController::class,
 Route::get('/logppob', [App\Http\Controllers\TransaksippobController::class, 'ppob']);
 Route::get('/ppobexport', [App\Http\Controllers\TransaksippobController::class, 'export']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/total', [App\Http\Controllers\ajaxController::class, 'ajax']);
 
 // Route::resource('/elearning', EnvLearningController::class);

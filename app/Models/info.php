@@ -8,14 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class info extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
-    protected $table = "info";
-    protected $primaryKey = "id_info";
-    public $timestamps = false;
-    protected $fillable = [
-        'gambar_info',
-        
-=======
 
     protected $table = 'info';
 
@@ -26,6 +18,5 @@ class info extends Model
     protected $fillable = [
         'gambar_info',
 
->>>>>>> 0943348 (initial commit)
     ];
 }

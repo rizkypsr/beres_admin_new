@@ -18,11 +18,7 @@ class UserChallenge extends Model
 
     public function customer()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(Customer::class, "customer_id", "id_customer");
-=======
         return $this->belongsTo(Customer::class, 'customer_id', 'id_customer');
->>>>>>> 0943348 (initial commit)
     }
 
     public function user_challenge_images()

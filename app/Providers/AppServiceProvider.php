@@ -2,14 +2,8 @@
 
 namespace App\Providers;
 
-<<<<<<< HEAD
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
-
-=======
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
->>>>>>> 0943348 (initial commit)
 
 class AppServiceProvider extends ServiceProvider
 {

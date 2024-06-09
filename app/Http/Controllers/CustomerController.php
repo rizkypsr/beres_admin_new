@@ -2,26 +2,11 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\kecamatan;
-use App\Models\User;
-use App\Models\topup;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\customerexport;
-
-=======
-use App\Exports\customerexport;
->>>>>>> 0943348 (initial commit)
 use App\Exports\tokoexport;
 use App\Imports\CustomerImport;
 use App\Imports\TokoImport;
 use App\Models\Customer;
-<<<<<<< HEAD
-=======
 use App\Models\kecamatan;
 use App\Models\topup;
 use App\Models\User;
@@ -30,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
->>>>>>> 0943348 (initial commit)
 
 class CustomerController extends Controller
 {
@@ -38,27 +22,6 @@ class CustomerController extends Controller
     {
         $this->middleware('auth');
     }
-<<<<<<< HEAD
-    public function index()
-    {
-        if (auth()->user()->role == "superadmin") {
-            $customer = Customer::with('kecamatan')->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
-            return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
-        }
-        if (auth()->user()->role == "admin") {
-            $user = User::find(auth()->user()->id);
-            $customer = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'customer')->where('customer_is_delete', 0)->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
-            return view('customer.customer')->with('customer', $customer)->with('kecamatan', $kecamatan);
-        }
-
-
-        // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();
-
-
-    }
-=======
 
     public function index()
     {
@@ -80,7 +43,6 @@ class CustomerController extends Controller
 
     }
 
->>>>>>> 0943348 (initial commit)
     public function addcustomer(Request $request)
     {
         // add validation
@@ -112,15 +74,9 @@ class CustomerController extends Controller
                 'customer_is_delete' => 0,
             ]);
 
-<<<<<<< HEAD
-            return redirect("/customer")->with('success', 'Berhasil Menambahkan Customer');
-        } catch (\Exception $e) {
-            return redirect("/customer")->with('warning', 'Gagal Menambahkan Customer: ' . $e->getMessage());
-=======
             return redirect('/customer')->with('success', 'Berhasil Menambahkan Customer');
         } catch (\Exception $e) {
             return redirect('/customer')->with('warning', 'Gagal Menambahkan Customer: '.$e->getMessage());
->>>>>>> 0943348 (initial commit)
         }
 
         // $cus = DB::table('customer')->where('customer_is_delete', '=', 1)->first();
@@ -158,22 +114,14 @@ class CustomerController extends Controller
         // $customer->role_customer = 'customer';
         // $customer->save();
 
-<<<<<<< HEAD
-        return redirect("/customer")->with('success', 'Berhasil Menambahkan Customer');
-=======
         return redirect('/customer')->with('success', 'Berhasil Menambahkan Customer');
->>>>>>> 0943348 (initial commit)
     }
 
     public function updatecustomer(Request $request, $id)
     {
 
         $customer = Customer::find($id);
-<<<<<<< HEAD
-        // $customer->id_customer = $request->input('id_customer'); 
-=======
         // $customer->id_customer = $request->input('id_customer');
->>>>>>> 0943348 (initial commit)
         $customer->id_kecamatan_customer = $request->input('id_kecamatan_customer');
         $customer->nama = $request->input('nama_customer');
         $customer->alamat_customer = $request->input('alamat_customer');
@@ -185,14 +133,9 @@ class CustomerController extends Controller
         $customer->tgl_lahir = $request->input('tgl_lahir');
         $customer->save();
 
-<<<<<<< HEAD
-        return redirect("/customer")->with('success', 'Berhasil Update customer');
-    }
-=======
         return redirect('/customer')->with('success', 'Berhasil Update customer');
     }
 
->>>>>>> 0943348 (initial commit)
     public function deletecustomer($id)
     {
         $customer = customer::find($id);
@@ -201,14 +144,9 @@ class CustomerController extends Controller
 
         $customer->delete();
 
-<<<<<<< HEAD
-        return redirect("/customer")->with('success', 'Berhasil menghapus customer');
-    }
-=======
         return redirect('/customer')->with('success', 'Berhasil menghapus customer');
     }
 
->>>>>>> 0943348 (initial commit)
     public function topupcustomer(Request $request, $id)
     {
 
@@ -229,11 +167,7 @@ class CustomerController extends Controller
         $topup->created_at = Carbon::now();
         $topup->save();
 
-<<<<<<< HEAD
-        return redirect("/customer")->with('success', 'Berhasil menambahkan saldo');
-=======
         return redirect('/customer')->with('success', 'Berhasil menambahkan saldo');
->>>>>>> 0943348 (initial commit)
     }
 
     public function exportcustomer()
@@ -250,11 +184,7 @@ class CustomerController extends Controller
     {
         // only xlsx, xls, csv file allowed
         $request->validate([
-<<<<<<< HEAD
-            'file' => 'required|mimes:xlsx,xls,csv'
-=======
             'file' => 'required|mimes:xlsx,xls,csv',
->>>>>>> 0943348 (initial commit)
         ]);
 
         Excel::import(new CustomerImport, request()->file('file'));
@@ -266,11 +196,7 @@ class CustomerController extends Controller
     {
         // only xlsx, xls, csv file allowed
         $request->validate([
-<<<<<<< HEAD
-            'file' => 'required|mimes:xlsx,xls,csv'
-=======
             'file' => 'required|mimes:xlsx,xls,csv',
->>>>>>> 0943348 (initial commit)
         ]);
 
         Excel::import(new TokoImport, request()->file('file'));

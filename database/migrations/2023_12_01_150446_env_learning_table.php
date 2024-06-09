@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-<<<<<<< HEAD
-use Illuminate\Database\Schema\Blueprint;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration

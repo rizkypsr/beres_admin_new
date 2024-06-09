@@ -22,12 +22,8 @@ class ArtikelController extends Controller
         $artikel = Artikel::with('artikel_images')->orderBy('no_urut', 'asc')->paginate($perPage, ['*'], 'page', $page);
 
         $artikel->getCollection()->transform(function ($artikel) {
-<<<<<<< HEAD
-            $artikel->image = url('storage/artikel/' . $artikel->image);
-=======
             $artikel->image = url('storage/artikel/'.$artikel->image);
 
->>>>>>> 0943348 (initial commit)
             return $artikel;
         });
 
@@ -44,10 +40,6 @@ class ArtikelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,10 +61,6 @@ class ArtikelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

@@ -18,11 +18,6 @@ return new class extends Migration
             $table->string('gambar_ppob');
             $table->string('judul_ppob');
             $table->boolean('ppob_is_delete')->default(false);
-<<<<<<< HEAD
-           
-=======
-
->>>>>>> 0943348 (initial commit)
             $table->timestamps();
         });
     }

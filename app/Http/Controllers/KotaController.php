@@ -3,15 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\KecamatanExport;
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use App\Models\kota;
-use App\Models\kecamatan;
-=======
 use App\Models\kecamatan;
 use App\Models\kota;
 use Illuminate\Http\Request;
->>>>>>> 0943348 (initial commit)
 use Maatwebsite\Excel\Facades\Excel;
 
 class KotaController extends Controller
@@ -20,13 +14,6 @@ class KotaController extends Controller
     {
         $this->middleware('auth');
     }
-<<<<<<< HEAD
-    public function index()
-    {
-        $kota = kota::where('kota_is_delete', 0)->get();
-        return view('kota.kota')->with('kota', $kota);
-    }
-=======
 
     public function index()
     {
@@ -35,7 +22,6 @@ class KotaController extends Controller
         return view('kota.kota')->with('kota', $kota);
     }
 
->>>>>>> 0943348 (initial commit)
     public function addkota(Request $request)
     {
 
@@ -45,10 +31,7 @@ class KotaController extends Controller
 
         return redirect('/kota')->with('success', 'Berhasil Menambahkan kota');
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
     public function updatekota(Request $request, $id)
     {
 
@@ -58,10 +41,7 @@ class KotaController extends Controller
 
         return redirect('/kota')->with('success', 'Berhasil update kota');
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
     public function deletekota($id)
     {
 
@@ -77,16 +57,8 @@ class KotaController extends Controller
             $value->save();
         }
 
-<<<<<<< HEAD
-
         $kota->save();
 
-
-
-=======
-        $kota->save();
-
->>>>>>> 0943348 (initial commit)
         return redirect('/kota')->with('success', 'Berhasil Delete Kota');
     }
 

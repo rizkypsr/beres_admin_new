@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-=======
->>>>>>> 0943348 (initial commit)
 use App\Models\produkumkm;
 
 class ProdukumkmapiController extends Controller
@@ -21,11 +17,7 @@ class ProdukumkmapiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Daftar Produk UMKM',
-<<<<<<< HEAD
-            'data' => $produkumkm
-=======
             'data' => $produkumkm,
->>>>>>> 0943348 (initial commit)
         ], 200);
     }
 }

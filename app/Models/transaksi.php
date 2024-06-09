@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class transaksi extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
-    protected $table = "transaksi";
-    protected $primaryKey = "id_transaksi";
-    public $timestamps = false;
-=======
 
     protected $table = 'transaksi';
 
@@ -20,7 +15,6 @@ class transaksi extends Model
 
     public $timestamps = false;
 
->>>>>>> 0943348 (initial commit)
     protected $fillable = [
         'id_customer_transaksi',
         'tanggal_transaksi',
@@ -36,10 +30,6 @@ class transaksi extends Model
 
     public function customer()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(Customer::class, "id_customer_transaksi", "nik_customer");
-=======
         return $this->belongsTo(Customer::class, 'id_customer_transaksi', 'nik_customer');
->>>>>>> 0943348 (initial commit)
     }
 }

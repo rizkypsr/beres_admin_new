@@ -3,15 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\topup;
-use App\Models\transaksi;
-use App\Models\kecamatan;
-use App\Models\User;
-use Carbon\Carbon;
-=======
 use App\Models\kecamatan;
 use App\Models\topup;
 use App\Models\transaksi;
@@ -19,7 +10,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
->>>>>>> 0943348 (initial commit)
 
 class TokoController extends Controller
 {
@@ -27,19 +17,6 @@ class TokoController extends Controller
     {
         $this->middleware('auth');
     }
-<<<<<<< HEAD
-    public function index()
-    {
-        if (auth()->user()->role == "superadmin") {
-            $toko = Customer::with('kecamatan')->where('role_customer', 'toko')->get();
-            $kecamatan = kecamatan::where('status_kecamatan', 0)->get();
-            return view('toko.toko')->with('toko', $toko)->with('kecamatan', $kecamatan);
-        }
-        if (auth()->user()->role == "admin") {
-            $user = User::find(auth()->user()->id);
-            $toko = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'toko')->get();
-            $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user);
-=======
 
     public function index()
     {
@@ -54,19 +31,13 @@ class TokoController extends Controller
             $toko = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'toko')->get();
             $kecamatan = kecamatan::where('id_kecamatan', $user->id_kecamatan_user);
 
->>>>>>> 0943348 (initial commit)
             return view('toko.toko')->with('toko', $toko)->with('kecamatan', $kecamatan);
         }
 
         // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();
 
-<<<<<<< HEAD
-
-    }
-=======
     }
 
->>>>>>> 0943348 (initial commit)
     public function addtoko(Request $request)
     {
 
@@ -87,23 +58,14 @@ class TokoController extends Controller
         $toko->role_customer = 'toko';
         $toko->save();
 
-<<<<<<< HEAD
-        return redirect("/toko")->with('success', 'Berhasil Menambahkan Toko');
-    }
-=======
         return redirect('/toko')->with('success', 'Berhasil Menambahkan Toko');
     }
 
->>>>>>> 0943348 (initial commit)
     public function updatetoko(Request $request, $id)
     {
 
         $toko = Customer::find($id);
-<<<<<<< HEAD
-        // $toko->id_customer = $request->input('id_customer'); 
-=======
         // $toko->id_customer = $request->input('id_customer');
->>>>>>> 0943348 (initial commit)
         $toko->id_kecamatan_customer = $request->input('id_kecamatan_customer');
         $toko->nama = $request->input('nama');
         $toko->alamat_customer = $request->input('alamat_customer');
@@ -119,26 +81,16 @@ class TokoController extends Controller
 
         $toko->save();
 
-<<<<<<< HEAD
-        return redirect("/toko")->with('success', 'Berhasil Update toko');
-    }
-=======
         return redirect('/toko')->with('success', 'Berhasil Update toko');
     }
 
->>>>>>> 0943348 (initial commit)
     public function deletetoko($id)
     {
         Customer::find($id)->delete();
 
-<<<<<<< HEAD
-        return redirect("/toko")->with('success', 'Berhasil Menghapus toko');
-    }
-=======
         return redirect('/toko')->with('success', 'Berhasil Menghapus toko');
     }
 
->>>>>>> 0943348 (initial commit)
     public function topuptoko(Request $request, $id)
     {
 
@@ -158,10 +110,6 @@ class TokoController extends Controller
         $topup->total_saldo_topup = $toko->saldo_customer;
         $topup->save();
 
-<<<<<<< HEAD
-        return redirect("/toko")->with('success', 'Berhasil menambahkan saldo');
-=======
         return redirect('/toko')->with('success', 'Berhasil menambahkan saldo');
->>>>>>> 0943348 (initial commit)
     }
 }

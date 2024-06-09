@@ -3,11 +3,6 @@
 namespace App\Imports;
 
 use App\Models\Customer;
-<<<<<<< HEAD
-use App\Models\kecamatan;
-use DateTime;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -37,10 +32,6 @@ class CustomerImport implements ToModel, WithHeadingRow, WithValidation
             'tgl_lahir' => $formattedDate,
         ]);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
         return $cus;
     }
 

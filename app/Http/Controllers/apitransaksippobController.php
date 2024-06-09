@@ -2,18 +2,10 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\transaksippob;
-use App\Models\detailppob;
-use Carbon\Carbon;
-=======
 use App\Models\detailppob;
 use App\Models\transaksippob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
->>>>>>> 0943348 (initial commit)
 use Illuminate\Support\Facades\Validator;
 
 class apitransaksippobController extends Controller
@@ -22,10 +14,7 @@ class apitransaksippobController extends Controller
     {
 
         $tpp = transaksippob::with('customer')->where('customer_ppob', $id)->get();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
         // $tpp = transaksippob::all();
         // return view('ppob.ppob')->with('ppob',$ppob);
         return response()->json([
@@ -34,10 +23,7 @@ class apitransaksippobController extends Controller
             'data' => $tpp,
         ]);
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
     public function add(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
@@ -47,13 +33,8 @@ class apitransaksippobController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'msg' => "cek your data wik",
-                'data' => $validate->errors()
-=======
                 'msg' => 'cek your data wik',
                 'data' => $validate->errors(),
->>>>>>> 0943348 (initial commit)
             ], 400);
         }
 
@@ -62,11 +43,7 @@ class apitransaksippobController extends Controller
         if ($detailppob == null) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'msg' => "data ppob not found",
-=======
                 'msg' => 'data ppob not found',
->>>>>>> 0943348 (initial commit)
                 'data' => null,
             ]);
         }

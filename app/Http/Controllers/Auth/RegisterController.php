@@ -3,13 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
-=======
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
->>>>>>> 0943348 (initial commit)
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,10 +44,6 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-<<<<<<< HEAD
-     * @param  array  $data
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -67,10 +58,6 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-<<<<<<< HEAD
-     * @param  array  $data
-=======
->>>>>>> 0943348 (initial commit)
      * @return \App\Models\User
      */
     protected function create(array $data)

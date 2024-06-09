@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Controller;
-use App\Models\transaksippob;
-use App\Models\transaksijs;
-=======
 use App\Models\transaksijs;
 use App\Models\transaksippob;
->>>>>>> 0943348 (initial commit)
 use App\Models\transfer;
 
 class logController extends Controller

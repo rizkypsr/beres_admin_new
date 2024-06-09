@@ -26,11 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('elearnings', function (Blueprint $table) {
-<<<<<<< HEAD
-            $table->dropColumn(['user_type',]);
-=======
             $table->dropColumn(['user_type']);
->>>>>>> 0943348 (initial commit)
         });
     }
 };

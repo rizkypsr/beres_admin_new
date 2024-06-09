@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\challenges;
-<<<<<<< HEAD
-use Carbon\Carbon;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Http\Request;
 
 class ChallengeController extends Controller
@@ -25,11 +21,7 @@ class ChallengeController extends Controller
 
         if ($dayFilter) {
             $validDays = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-<<<<<<< HEAD
-            if (!in_array(strtolower($dayFilter), $validDays)) {
-=======
             if (! in_array(strtolower($dayFilter), $validDays)) {
->>>>>>> 0943348 (initial commit)
                 return response()->json(['error' => 'Hari yang diberikan tidak valid'], 422);
             }
         }
@@ -55,10 +47,6 @@ class ChallengeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -81,7 +69,6 @@ class ChallengeController extends Controller
      * Update the specified resource in storage.
      *
 <<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
 =======
 >>>>>>> 0943348 (initial commit)
      * @param  int  $id

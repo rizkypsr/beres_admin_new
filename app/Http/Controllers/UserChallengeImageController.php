@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use App\Models\UserChallenge;
-=======
->>>>>>> 0943348 (initial commit)
 use App\Models\UserChallengeImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -43,10 +39,6 @@ class UserChallengeImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -79,10 +71,6 @@ class UserChallengeImageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -102,11 +90,7 @@ class UserChallengeImageController extends Controller
         try {
             $userChallengeImage = UserChallengeImage::findOrFail($id);
 
-<<<<<<< HEAD
-            Storage::disk('public')->delete('user-challenges/images/' . $userChallengeImage->image);
-=======
             Storage::disk('public')->delete('user-challenges/images/'.$userChallengeImage->image);
->>>>>>> 0943348 (initial commit)
 
             $userChallengeImage->delete();
 

@@ -2,13 +2,8 @@
 
 namespace App\Console\Commands;
 
-<<<<<<< HEAD
-use Illuminate\Console\Command;
-use Carbon\Carbon;
-=======
 use Carbon\Carbon;
 use Illuminate\Console\Command;
->>>>>>> 0943348 (initial commit)
 
 class transaksijs extends Command
 {
@@ -43,11 +38,7 @@ class transaksijs extends Command
      */
     public function handle()
     {
-<<<<<<< HEAD
-            transaksijs::where('created_at', '<', Carbon::now())->each(function ($tjs) {
-=======
         transaksijs::where('created_at', '<', Carbon::now())->each(function ($tjs) {
->>>>>>> 0943348 (initial commit)
             $tjs->delete();
         });
         // return 0;

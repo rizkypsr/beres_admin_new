@@ -6,10 +6,6 @@ use App\Models\Customer;
 use App\Models\UserChallenge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-<<<<<<< HEAD
-use RealRashid\SweetAlert\Facades\Alert;
-=======
->>>>>>> 0943348 (initial commit)
 
 class UserChallengeControler extends Controller
 {
@@ -40,10 +36,6 @@ class UserChallengeControler extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -76,10 +68,6 @@ class UserChallengeControler extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

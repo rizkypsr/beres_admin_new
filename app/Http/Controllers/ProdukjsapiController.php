@@ -12,10 +12,6 @@ class ProdukjsapiController extends Controller
         $produkjs = produkjs::where('js_is_delete', 0)
             ->where('id_kecamatan', $id)->get();
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
         // with('customer')->where('id_customer_transaksi',$customer->customer_id)->get();
 
         return response()->json([

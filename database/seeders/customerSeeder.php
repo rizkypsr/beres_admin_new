@@ -3,10 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-<<<<<<< HEAD
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,11 +26,7 @@ class customerSeeder extends Seeder
                 'no_hp_customer' => 0,
                 'role_customer' => 'customer',
                 'tempat_lahir' => 'surabaya',
-<<<<<<< HEAD
-                'tgl_lahir' => '2000-01-01'
-=======
                 'tgl_lahir' => '2000-01-01',
->>>>>>> 0943348 (initial commit)
             ], [
                 'id_customer' => 12000,
                 'id_kecamatan_customer' => 1,
@@ -45,16 +37,9 @@ class customerSeeder extends Seeder
                 'no_hp_customer' => 0,
                 'role_customer' => 'toko',
                 'tempat_lahir' => 'surabaya',
-<<<<<<< HEAD
-                'tgl_lahir' => '2000-01-01'
-            ],
-
-
-=======
                 'tgl_lahir' => '2000-01-01',
             ],
 
->>>>>>> 0943348 (initial commit)
         ]);
     }
 }

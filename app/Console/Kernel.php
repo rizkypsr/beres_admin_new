@@ -10,10 +10,6 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-=======
->>>>>>> 0943348 (initial commit)
      * @return void
      */
     protected function schedule(Schedule $schedule)

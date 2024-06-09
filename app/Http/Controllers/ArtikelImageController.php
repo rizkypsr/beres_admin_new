@@ -43,10 +43,6 @@ class ArtikelImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -61,11 +57,7 @@ class ArtikelImageController extends Controller
 
             if ($request->hasFile('image')) {
                 foreach ($request->file('image') as $image) {
-<<<<<<< HEAD
-                    $imageName = time() . '_' . $image->getClientOriginalName();
-=======
                     $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
                     $image->storeAs('artikel', $imageName, 'public');
                     $imageNames[] = $imageName;
                 }
@@ -109,10 +101,6 @@ class ArtikelImageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -128,21 +116,13 @@ class ArtikelImageController extends Controller
 
             $image = $request->file('image');
 
-<<<<<<< HEAD
-            $imageName = time() . '_' . $image->getClientOriginalName();
-=======
             $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
             $image->storeAs('artikel', $imageName, 'public');
 
             $artikelImage->image = $imageName;
 
             if ($artikelImage->save()) {
-<<<<<<< HEAD
-                Storage::disk('public')->delete('artikel/' . $oldImage);
-=======
                 Storage::disk('public')->delete('artikel/'.$oldImage);
->>>>>>> 0943348 (initial commit)
             }
 
             return redirect()->route('artikel-image.index')->with('success', 'Gambar berhasil diubah');
@@ -166,11 +146,7 @@ class ArtikelImageController extends Controller
         try {
             $artikelImage = ArtikelImage::findOrFail($id);
 
-<<<<<<< HEAD
-            Storage::disk('public')->delete('artikel/' . $artikelImage->image);
-=======
             Storage::disk('public')->delete('artikel/'.$artikelImage->image);
->>>>>>> 0943348 (initial commit)
 
             $artikelImage->delete();
 

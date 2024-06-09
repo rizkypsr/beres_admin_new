@@ -21,12 +21,8 @@ class InfoController extends Controller
         $info = info::paginate($perPage, ['*'], 'page', $page);
 
         $info->getCollection()->transform(function ($inf) {
-<<<<<<< HEAD
-            $inf->gambar_info = url('images/info/' . $inf->gambar_info);
-=======
             $inf->gambar_info = url('images/info/'.$inf->gambar_info);
 
->>>>>>> 0943348 (initial commit)
             return $inf;
         });
 
@@ -43,10 +39,6 @@ class InfoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -68,10 +60,6 @@ class InfoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

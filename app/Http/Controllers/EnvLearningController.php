@@ -4,11 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\elearning;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Validator;
-use Alert;
-=======
->>>>>>> 0943348 (initial commit)
 
 class EnvLearningController extends Controller
 {

@@ -2,18 +2,10 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use Illuminate\Http\Request;
-use App\Models\transfer;
-use Carbon\Carbon;
-=======
 use App\Models\Customer;
 use App\Models\transfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
->>>>>>> 0943348 (initial commit)
 use Illuminate\Support\Facades\Validator;
 
 class apitransferController extends Controller
@@ -31,10 +23,6 @@ class apitransferController extends Controller
 
         $transfer = transfer::with('customer')->where('pengirim', $id)->get();
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
         // return view('ppob.ppob')->with('ppob',$ppob);
         return response()->json([
             'status' => 'success',
@@ -53,13 +41,8 @@ class apitransferController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'status' => 'success',
-<<<<<<< HEAD
-                'msg' => "Get data successfully",
-                'data' => $validate->errors()
-=======
                 'msg' => 'Get data successfully',
                 'data' => $validate->errors(),
->>>>>>> 0943348 (initial commit)
             ], 400);
         }
 
@@ -75,11 +58,7 @@ class apitransferController extends Controller
         if ($customerpengirim == null) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'message' => "data customer not found",
-=======
                 'message' => 'data customer not found',
->>>>>>> 0943348 (initial commit)
                 'data' => null,
             ], 400);
         }
@@ -87,22 +66,14 @@ class apitransferController extends Controller
         if ($customerpenerima == null) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'message' => "data penerima not found",
-=======
                 'message' => 'data penerima not found',
->>>>>>> 0943348 (initial commit)
                 'data' => null,
             ], 400);
         }
         if ($customerpenerima == $customerpengirim) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'message' => "data penerima tidak valid",
-=======
                 'message' => 'data penerima tidak valid',
->>>>>>> 0943348 (initial commit)
                 'data' => null,
             ], 400);
         }

@@ -5,11 +5,6 @@ use App\Http\Controllers\Api\ChallengeController;
 use App\Http\Controllers\Api\EnvController;
 use App\Http\Controllers\Api\InfoController;
 use App\Http\Controllers\Api\UserChallengeController;
-<<<<<<< HEAD
-use App\Http\Controllers\CustomerapiController;
-use App\Models\challenges;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,15 +27,8 @@ Route::get('/customerget/{id}', [App\Http\Controllers\CustomerapiController::cla
 
 Route::post('/topupcustomer/{id}', [App\Http\Controllers\CustomerapiController::class, 'topupcustomer']);
 
-<<<<<<< HEAD
-
 Route::get('/toko', [App\Http\Controllers\TokoapiController::class, 'index']);
 
-
-=======
-Route::get('/toko', [App\Http\Controllers\TokoapiController::class, 'index']);
-
->>>>>>> 0943348 (initial commit)
 Route::get('/umkm/{id}', [App\Http\Controllers\UmkmapiController::class, 'index']);
 
 Route::get('/produkumkm/{id}', [App\Http\Controllers\ProdukumkmapiController::class, 'index']);
@@ -71,10 +59,6 @@ Route::get('/kecamatan', [App\Http\Controllers\apiKecamatanController::class, 'i
 
 Route::get('/ppob', [App\Http\Controllers\apippobController::class, 'index']);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
 Route::get('/bayartoko/{id}', [App\Http\Controllers\apibayartokoController::class, 'index']);
 Route::post('/bayartokoadd/{id}', [App\Http\Controllers\apibayartokoController::class, 'add']);
 

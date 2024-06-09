@@ -43,10 +43,6 @@ class ChallengeImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -61,11 +57,7 @@ class ChallengeImageController extends Controller
 
             if ($request->hasFile('image')) {
                 foreach ($request->file('image') as $image) {
-<<<<<<< HEAD
-                    $imageName = time() . '_' . $image->getClientOriginalName();
-=======
                     $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
                     $image->storeAs('challenges', $imageName, 'public');
                     $imageNames[] = $imageName;
                 }
@@ -109,10 +101,6 @@ class ChallengeImageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -128,21 +116,13 @@ class ChallengeImageController extends Controller
 
             $image = $request->file('image');
 
-<<<<<<< HEAD
-            $imageName = time() . '_' . $image->getClientOriginalName();
-=======
             $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
             $image->storeAs('challenges', $imageName, 'public');
 
             $challengeImage->image = $imageName;
 
             if ($challengeImage->save()) {
-<<<<<<< HEAD
-                Storage::disk('public')->delete('challenges/' . $oldImage);
-=======
                 Storage::disk('public')->delete('challenges/'.$oldImage);
->>>>>>> 0943348 (initial commit)
             }
 
             return redirect()->route('challenge-image.index')->with('success', 'Gambar berhasil diubah');
@@ -166,11 +146,7 @@ class ChallengeImageController extends Controller
         try {
             $challengeImage = ChallengeImage::findOrFail($id);
 
-<<<<<<< HEAD
-            Storage::disk('public')->delete('challenges/' . $challengeImage->image);
-=======
             Storage::disk('public')->delete('challenges/'.$challengeImage->image);
->>>>>>> 0943348 (initial commit)
 
             $challengeImage->delete();
 

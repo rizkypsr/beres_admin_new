@@ -6,18 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\challenges;
 use App\Models\Customer;
 use App\Models\elearning;
-<<<<<<< HEAD
-use App\Models\toko;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-<<<<<<< HEAD
-use Illuminate\Validation\ValidationException;
-=======
->>>>>>> 0943348 (initial commit)
 
 class EnvController extends Controller
 {
@@ -33,10 +25,6 @@ class EnvController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,29 +53,18 @@ class EnvController extends Controller
             'status' => 'in:-1,0,1',
             'user_id' => 'required',
             'user_type' => 'required',
-<<<<<<< HEAD
-            'challenge_id' => 'required'
-=======
             'challenge_id' => 'required',
->>>>>>> 0943348 (initial commit)
         ], $customMessages);
 
         if ($validator->fails()) {
             $errors = $validator->errors()->toArray();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
             return response()->json(['error' => 'Pastikan semua data terisi dengan benar dan lengkap', 'details' => $errors], 422);
         }
 
         $challenge = challenges::find($request->challenge_id);
 
-<<<<<<< HEAD
-        if (!$challenge) {
-=======
         if (! $challenge) {
->>>>>>> 0943348 (initial commit)
             return response()->json(['error' => 'Challenge not found'], 404);
         }
 
@@ -99,11 +76,7 @@ class EnvController extends Controller
             'deskripsi' => $request->input('deskripsi'),
             'link' => $videoPath,
             'point' => $request->input('point', 0) + $challenge->point,
-<<<<<<< HEAD
-            'status' => $request->input('status', "-1"),
-=======
             'status' => $request->input('status', '-1'),
->>>>>>> 0943348 (initial commit)
             'user_id' => $request->input('user_id'),
             'user_type' => $request->input('user_type'),
             'challenge_id' => $request->input('challenge_id'),
@@ -118,10 +91,6 @@ class EnvController extends Controller
         return response()->json(['message' => 'Selamat! Anda berhasil mengikuti challenge'], 201);
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
     // $user = Auth::user();
 
     /**
@@ -138,10 +107,6 @@ class EnvController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -170,10 +135,7 @@ class EnvController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors()->toArray();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
             return response()->json(['error' => 'Pastikan semua data terisi dengan benar dan lengkap', 'details' => $errors], 422);
         }
 
@@ -186,10 +148,6 @@ class EnvController extends Controller
             return response()->json(['valid' => true, 'user_id' => $id, 'user_type' => $customer->role_customer]);
         }
 
-<<<<<<< HEAD
-        return response()->json(['valid' => false, 'message' => 'ID dan Pin tidak valid!',]);
-=======
         return response()->json(['valid' => false, 'message' => 'ID dan Pin tidak valid!']);
->>>>>>> 0943348 (initial commit)
     }
 }

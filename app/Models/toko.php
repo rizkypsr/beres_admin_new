@@ -10,15 +10,9 @@ class Toko extends Model
 {
     use HasFactory;
 
-<<<<<<< HEAD
-    protected $table = "toko";
-
-    protected $primaryKey = "id_toko";
-=======
     protected $table = 'toko';
 
     protected $primaryKey = 'id_toko';
->>>>>>> 0943348 (initial commit)
 
     public $timestamps = false;
 
@@ -33,20 +27,12 @@ class Toko extends Model
 
     public function transaksi()
     {
-<<<<<<< HEAD
-        return $this->hasMany(transaksi::class, "id_customer_transaksi", "nik_customer");
-=======
         return $this->hasMany(transaksi::class, 'id_customer_transaksi', 'nik_customer');
->>>>>>> 0943348 (initial commit)
     }
 
     public function kecamatan()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(kecamatan::class, "id_kecamatan_toko", "id_kecamatan");
-=======
         return $this->belongsTo(kecamatan::class, 'id_kecamatan_toko', 'id_kecamatan');
->>>>>>> 0943348 (initial commit)
     }
 
     public function user_challenge(): MorphOne

@@ -7,10 +7,6 @@ use App\Models\challenges;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-<<<<<<< HEAD
-use Illuminate\Validation\ValidationException;
-=======
->>>>>>> 0943348 (initial commit)
 
 class ChallengeController extends Controller
 {
@@ -39,10 +35,6 @@ class ChallengeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -82,11 +74,7 @@ class ChallengeController extends Controller
             if ($request->hasFile('image')) {
                 $images = $request->file('image');
                 foreach ($images as $image) {
-<<<<<<< HEAD
-                    $imageName = time() . '_' . $image->getClientOriginalName();
-=======
                     $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
                     $image->storeAs('challenges', $imageName, 'public');
 
                     ChallengeImage::create([
@@ -98,11 +86,7 @@ class ChallengeController extends Controller
 
             return redirect()->route('challenge.index')->with('success', 'Challenge berhasil dibuat');
         } catch (\Exception $e) {
-<<<<<<< HEAD
-            return redirect()->back()->with('errors', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
-=======
             return redirect()->back()->with('errors', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
->>>>>>> 0943348 (initial commit)
         }
     }
 
@@ -130,10 +114,6 @@ class ChallengeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -143,11 +123,7 @@ class ChallengeController extends Controller
         $validator = Validator::make($request->all(), [
             'judul' => 'required',
             'deskripsi' => 'required',
-<<<<<<< HEAD
-            'hari' => 'required|unique:challenges,hari,' . $id,
-=======
             'hari' => 'required|unique:challenges,hari,'.$id,
->>>>>>> 0943348 (initial commit)
             'point' => 'required',
             'link' => 'required',
         ], [
@@ -159,10 +135,6 @@ class ChallengeController extends Controller
             'link.required' => 'Link harus diisi.',
         ]);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
         if ($validator->fails()) {
             return back()->with('errors', $validator->messages()->all()[0]);
         }
@@ -182,11 +154,7 @@ class ChallengeController extends Controller
 
             return redirect()->route('challenge.index')->with('success', 'Challenge berhasil diperbarui');
         } catch (\Exception $e) {
-<<<<<<< HEAD
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
-=======
             return redirect()->back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
->>>>>>> 0943348 (initial commit)
         }
     }
 
@@ -200,18 +168,11 @@ class ChallengeController extends Controller
     {
         try {
             $challenges = challenges::findOrFail($id);
-<<<<<<< HEAD
-            $challengeImages =  ChallengeImage::where('challenge_id', $id)->get();
-
-            if ($challengeImages->isEmpty()) {
-                $challenges->delete();
-=======
             $challengeImages = ChallengeImage::where('challenge_id', $id)->get();
 
             if ($challengeImages->isEmpty()) {
                 $challenges->delete();
 
->>>>>>> 0943348 (initial commit)
                 return redirect()->route('challenge.index')->with('success', 'Challenge berhasil dihapus!');
             }
 
@@ -238,11 +199,7 @@ class ChallengeController extends Controller
 
             return redirect()->route('challenge.index')->with('success', 'Challenge berhasil dihapus!');
         } catch (\Exception $e) {
-<<<<<<< HEAD
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
-=======
             return redirect()->back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
->>>>>>> 0943348 (initial commit)
         }
     }
 }

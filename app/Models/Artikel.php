@@ -9,11 +9,7 @@ class Artikel extends Model
 {
     use HasFactory;
 
-<<<<<<< HEAD
-    protected $table = "artikel";
-=======
     protected $table = 'artikel';
->>>>>>> 0943348 (initial commit)
 
     protected $guarded = [];
 

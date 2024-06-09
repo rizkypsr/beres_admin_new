@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class qurbansampah extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
-    protected $table = "qurbansampah";
-    protected $primaryKey = "id_qurban";
-    public $timestamps = false;
-=======
 
     protected $table = 'qurbansampah';
 
@@ -20,15 +15,9 @@ class qurbansampah extends Model
 
     public $timestamps = false;
 
->>>>>>> 0943348 (initial commit)
     protected $fillable = [
         'gambar_qurban',
         'nama_qurban',
         'deskripsi_qurban',
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 0943348 (initial commit)
     ];
 }

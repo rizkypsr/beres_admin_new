@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\bayartoko;
-use App\Models\Customer;
-use Carbon\Carbon;
-use \Validator;
-=======
 use App\Models\bayartoko;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
->>>>>>> 0943348 (initial commit)
 
 class apibayartokoController extends Controller
 {
@@ -23,10 +14,7 @@ class apibayartokoController extends Controller
     {
 
         $bt = bayartoko::with('customer')->where('pengirim_bayar', $id)->get();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
         // return view('ppob.ppob')->with('ppob',$ppob);
         return response()->json([
             'status' => 'success',
@@ -34,10 +22,7 @@ class apibayartokoController extends Controller
             'data' => $bt,
         ]);
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
     public function add(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
@@ -53,13 +38,8 @@ class apibayartokoController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'status' => 'success',
-<<<<<<< HEAD
-                'msg' => "Get data successfully",
-                'data' => $validate->errors()
-=======
                 'msg' => 'Get data successfully',
                 'data' => $validate->errors(),
->>>>>>> 0943348 (initial commit)
             ], 400);
         }
         $bt = new bayartoko;
@@ -67,11 +47,7 @@ class apibayartokoController extends Controller
         if ($customerpengirim == null) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'msg' => "data customer not found",
-=======
                 'msg' => 'data customer not found',
->>>>>>> 0943348 (initial commit)
                 'data' => null,
             ]);
         }
@@ -87,19 +63,11 @@ class apibayartokoController extends Controller
         if ($customerpenerima == null) {
             return response()->json([
                 'status' => 'failed',
-<<<<<<< HEAD
-                'msg' => "data toko not found",
-                'data' => null,
-            ]);
-        }
-        if ($customerpenerima->role_customer != "toko") {
-=======
                 'msg' => 'data toko not found',
                 'data' => null,
             ]);
         }
         if ($customerpenerima->role_customer != 'toko') {
->>>>>>> 0943348 (initial commit)
             return response()->json([
                 'status' => 'success',
                 'message' => 'penerima bukan toko',
@@ -107,11 +75,7 @@ class apibayartokoController extends Controller
             ]);
         }
 
-<<<<<<< HEAD
-        if ($customerpenerima->role_customer == "toko") {
-=======
         if ($customerpenerima->role_customer == 'toko') {
->>>>>>> 0943348 (initial commit)
             $bt->id_kecamatan_bayar = $customerpengirim->id_kecamatan_customer;
             $bt->pengirim_bayar = $id;
             $bt->toko_bayar = $customerpenerima->id_customer;
@@ -119,28 +83,14 @@ class apibayartokoController extends Controller
             $bt->nominal_bayar = $request->nominal_bayar;
             $nominal = $bt->nominal_bayar;
 
-<<<<<<< HEAD
-
-
             $bt->save();
 
-
-=======
-            $bt->save();
-
->>>>>>> 0943348 (initial commit)
             $saldopengirim = $customerpengirim->saldo_customer;
             $saldotransfer = $nominal;
             $saldoakhir = $saldopengirim - $saldotransfer;
             $customerpengirim->saldo_customer = $saldoakhir;
             $customerpengirim->save();
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 0943348 (initial commit)
             $saldopenerima = $customerpenerima->saldo_customer;
             $saldotransferpenerima = $nominal;
             $saldoakhirpenerima = $saldopenerima + $saldotransferpenerima;
@@ -156,20 +106,6 @@ class apibayartokoController extends Controller
             ]);
         }
 
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> 0943348 (initial commit)
         // return view('ppob.ppob')->with('ppob',$ppob);SDSASF
 
     }

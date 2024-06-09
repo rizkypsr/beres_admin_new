@@ -38,10 +38,6 @@ class ArtikelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,11 +65,7 @@ class ArtikelController extends Controller
             $images = $request->file('image');
 
             foreach ($images as $image) {
-<<<<<<< HEAD
-                $imageName = time() . '_' . $image->getClientOriginalName();
-=======
                 $imageName = time().'_'.$image->getClientOriginalName();
->>>>>>> 0943348 (initial commit)
                 $image->storeAs('artikel', $imageName, 'public');
 
                 ArtikelImage::create([
@@ -111,10 +103,6 @@ class ArtikelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

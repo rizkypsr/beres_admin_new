@@ -2,10 +2,6 @@
 
 namespace App\Models;
 
-<<<<<<< HEAD
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-=======
->>>>>>> 0943348 (initial commit)
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,10 +45,6 @@ class User extends Authenticatable
 
     public function kecamatan()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(kecamatan::class, "id_kecamatan_user","id_kecamatan");
-=======
         return $this->belongsTo(kecamatan::class, 'id_kecamatan_user', 'id_kecamatan');
->>>>>>> 0943348 (initial commit)
     }
 }

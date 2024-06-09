@@ -18,11 +18,6 @@ return new class extends Migration
             $table->string('gambar_qurban');
             $table->string('nama_qurban');
             $table->text('deskripsi_qurban');
-<<<<<<< HEAD
-            
-=======
-
->>>>>>> 0943348 (initial commit)
             $table->timestamps();
         });
     }

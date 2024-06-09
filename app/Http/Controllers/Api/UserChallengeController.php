@@ -24,10 +24,6 @@ class UserChallengeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -58,21 +54,14 @@ class UserChallengeController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors()->toArray();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0943348 (initial commit)
             return response()->json(['error' => 'Pastikan semua data terisi dengan benar dan lengkap', 'details' => $errors], 422);
         }
 
         try {
             $challenge = challenges::find($request->challenge_id);
 
-<<<<<<< HEAD
-            if (!$challenge) {
-=======
             if (! $challenge) {
->>>>>>> 0943348 (initial commit)
                 return response()->json(['error' => 'Challenge not found'], 404);
             }
 
@@ -97,11 +86,7 @@ class UserChallengeController extends Controller
                 $images = $request->file('image');
 
                 foreach ($images as $image) {
-<<<<<<< HEAD
-                    $imageName = time() . '_' . substr($image->getClientOriginalName(), 0, 50) . '.' . $image->getClientOriginalExtension();
-=======
                     $imageName = time().'_'.substr($image->getClientOriginalName(), 0, 50).'.'.$image->getClientOriginalExtension();
->>>>>>> 0943348 (initial commit)
                     $image->storeAs('user-challenges/images', $imageName, 'public');
 
                     UserChallengeImage::create([
@@ -131,10 +116,6 @@ class UserChallengeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-<<<<<<< HEAD
-     * @param  \Illuminate\Http\Request  $request
-=======
->>>>>>> 0943348 (initial commit)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

@@ -14,11 +14,7 @@ return [
         | Here you can specify how big the chunk should be.
         |
         */
-<<<<<<< HEAD
-        'chunk_size'             => 1000,
-=======
         'chunk_size' => 1000,
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------
@@ -45,16 +41,6 @@ return [
         | Configure e.g. delimiter, enclosure and line ending for CSV exports.
         |
         */
-<<<<<<< HEAD
-        'csv'                    => [
-            'delimiter'              => ',',
-            'enclosure'              => '"',
-            'line_ending'            => PHP_EOL,
-            'use_bom'                => false,
-            'include_separator_line' => false,
-            'excel_compatibility'    => false,
-            'output_encoding'        => '',
-=======
         'csv' => [
             'delimiter' => ',',
             'enclosure' => '"',
@@ -63,7 +49,6 @@ return [
             'include_separator_line' => false,
             'excel_compatibility' => false,
             'output_encoding' => '',
->>>>>>> 0943348 (initial commit)
         ],
 
         /*
@@ -74,22 +59,6 @@ return [
         | Configure e.g. default title, creator, subject,...
         |
         */
-<<<<<<< HEAD
-        'properties'             => [
-            'creator'        => '',
-            'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
-            'manager'        => '',
-            'company'        => '',
-        ],
-    ],
-
-    'imports'            => [
-=======
         'properties' => [
             'creator' => '',
             'lastModifiedBy' => '',
@@ -104,7 +73,6 @@ return [
     ],
 
     'imports' => [
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------
@@ -153,21 +121,12 @@ return [
         | Configure e.g. delimiter, enclosure and line ending for CSV imports.
         |
         */
-<<<<<<< HEAD
-        'csv'         => [
-            'delimiter'        => ',',
-            'enclosure'        => '"',
-            'escape_character' => '\\',
-            'contiguous'       => false,
-            'input_encoding'   => 'UTF-8',
-=======
         'csv' => [
             'delimiter' => ',',
             'enclosure' => '"',
             'escape_character' => '\\',
             'contiguous' => false,
             'input_encoding' => 'UTF-8',
->>>>>>> 0943348 (initial commit)
         ],
 
         /*
@@ -178,18 +137,6 @@ return [
         | Configure e.g. default title, creator, subject,...
         |
         */
-<<<<<<< HEAD
-        'properties'  => [
-            'creator'        => '',
-            'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
-            'manager'        => '',
-            'company'        => '',
-=======
         'properties' => [
             'creator' => '',
             'lastModifiedBy' => '',
@@ -200,7 +147,6 @@ return [
             'category' => '',
             'manager' => '',
             'company' => '',
->>>>>>> 0943348 (initial commit)
         ],
 
     ],
@@ -215,23 +161,6 @@ return [
     |
     */
     'extension_detector' => [
-<<<<<<< HEAD
-        'xlsx'     => Excel::XLSX,
-        'xlsm'     => Excel::XLSX,
-        'xltx'     => Excel::XLSX,
-        'xltm'     => Excel::XLSX,
-        'xls'      => Excel::XLS,
-        'xlt'      => Excel::XLS,
-        'ods'      => Excel::ODS,
-        'ots'      => Excel::ODS,
-        'slk'      => Excel::SLK,
-        'xml'      => Excel::XML,
-        'gnumeric' => Excel::GNUMERIC,
-        'htm'      => Excel::HTML,
-        'html'     => Excel::HTML,
-        'csv'      => Excel::CSV,
-        'tsv'      => Excel::TSV,
-=======
         'xlsx' => Excel::XLSX,
         'xlsm' => Excel::XLSX,
         'xltx' => Excel::XLSX,
@@ -247,7 +176,6 @@ return [
         'html' => Excel::HTML,
         'csv' => Excel::CSV,
         'tsv' => Excel::TSV,
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------
@@ -258,11 +186,7 @@ return [
         | Available options: Excel::MPDF | Excel::TCPDF | Excel::DOMPDF
         |
         */
-<<<<<<< HEAD
-        'pdf'      => Excel::DOMPDF,
-=======
         'pdf' => Excel::DOMPDF,
->>>>>>> 0943348 (initial commit)
     ],
 
     /*
@@ -303,11 +227,7 @@ return [
         | Drivers: memory|illuminate|batch
         |
         */
-<<<<<<< HEAD
-        'driver'     => 'memory',
-=======
         'driver' => 'memory',
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------
@@ -319,11 +239,7 @@ return [
         | Here you can tweak the memory limit to your liking.
         |
         */
-<<<<<<< HEAD
-        'batch'     => [
-=======
         'batch' => [
->>>>>>> 0943348 (initial commit)
             'memory_limit' => 60000,
         ],
 
@@ -361,11 +277,7 @@ return [
     */
     'transactions' => [
         'handler' => 'db',
-<<<<<<< HEAD
-        'db'      => [
-=======
         'db' => [
->>>>>>> 0943348 (initial commit)
             'connection' => null,
         ],
     ],
@@ -381,11 +293,7 @@ return [
         | storing reading or downloading. Here you can customize that path.
         |
         */
-<<<<<<< HEAD
-        'local_path'          => storage_path('framework/cache/laravel-excel'),
-=======
         'local_path' => storage_path('framework/cache/laravel-excel'),
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------
@@ -401,13 +309,8 @@ return [
         | in conjunction with queued imports and exports.
         |
         */
-<<<<<<< HEAD
-        'remote_disk'         => null,
-        'remote_prefix'       => null,
-=======
         'remote_disk' => null,
         'remote_prefix' => null,
->>>>>>> 0943348 (initial commit)
 
         /*
         |--------------------------------------------------------------------------

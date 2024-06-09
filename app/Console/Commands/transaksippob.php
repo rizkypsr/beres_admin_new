@@ -2,13 +2,8 @@
 
 namespace App\Console\Commands;
 
-<<<<<<< HEAD
-use Illuminate\Console\Command;
-use Carbon\Carbon;
-=======
 use Carbon\Carbon;
 use Illuminate\Console\Command;
->>>>>>> 0943348 (initial commit)
 
 class transaksippob extends Command
 {

@@ -10,10 +10,6 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class TokoImport implements ToModel, WithHeadingRow, WithValidation
 {
-<<<<<<< HEAD
-
-=======
->>>>>>> 0943348 (initial commit)
     public function model(array $row)
     {
         $unixTimestamp = ($row['tgl_lahir'] - 25569) * 86400;
