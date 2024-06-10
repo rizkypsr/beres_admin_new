@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\LogTransaksiJsDataTable;
 use App\DataTables\TransaksiJsDataTable;
 use App\Exports\transaksijsexport;
 use App\Models\Customer;
@@ -26,55 +27,22 @@ class TransaksijsController extends Controller
         return Excel::download(new transaksijsexport, 'transaksijs.xlsx');
     }
 
-    public function log()
+    public function log(LogTransaksiJsDataTable $dataTable)
     {
-        if (auth()->user()->role == 'superadmin') {
-            $tjs = transaksijs::with('kecamatan')->with('customer')->with('produkjs')->get();
-            $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
-            $produkjs = produkjs::where('js_is_delete', 0)->get();
-            $customer = Customer::where('customer_is_delete', 0)->get();
+        $listKecamatan = Kecamatan::where('status_kecamatan', 0)->get();
+        $produkjs = produkjs::where('js_is_delete', 0)->get();
+        $customer = Customer::where('customer_is_delete', 0)->get();
 
-            return view('transaksijs.logtransaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);
-        }
-
-        if (auth()->user()->role == 'admin') {
-            $user = User::find(auth()->user()->id);
-            $tjs = transaksijs::with('kecamatan')->with('customer')->where('id_kc_js', $user->id_kecamatan_user)->get();
-            $produkjs = produkjs::where('js_is_delete', 0)->get();
-            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
-            $customer = Customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
-
-            return view('transaksijs.logtransaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);
-        }
+        return $dataTable->render('transaksijs.logtransaksijs', compact('listKecamatan', 'produkjs', 'customer'));
     }
 
     public function index(TransaksiJsDataTable $dataTable)
     {
-
         $listKecamatan = Kecamatan::where('status_kecamatan', 0)->get();
         $produkjs = produkjs::where('js_is_delete', 0)->get();
         $customer = Customer::where('customer_is_delete', 0)->get();
 
         return $dataTable->render('transaksijs.transaksijs', compact('listKecamatan', 'produkjs', 'customer'));
-
-        // if (auth()->user()->role == 'superadmin') {
-        //     $tjs = transaksijs::with('kecamatan')->with('customer')->with('produkjs')->get();
-        //     $kecamatan = Kecamatan::where('status_kecamatan', 0)->get();
-        //     $produkjs = produkjs::where('js_is_delete', 0)->get();
-        //     $customer = Customer::where('customer_is_delete', 0)->get();
-
-        //     return view('transaksijs.transaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);
-        // }
-
-        // if (auth()->user()->role == 'admin') {
-        //     $user = User::find(auth()->user()->id);
-        //     $tjs = transaksijs::with('kecamatan')->with('customer')->where('id_kc_js', $user->id_kecamatan_user)->get();
-        //     $produkjs = produkjs::where('js_is_delete', 0)->get();
-        //     $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->where('status_kecamatan', 0)->get();
-        //     $customer = Customer::where('id_kecamatan_customer', $user->id_kecamatan_user)->where('customer_is_delete', 0)->get();
-
-        //     return view('transaksijs.transaksijs')->with('produkjs', $produkjs)->with('tjs', $tjs)->with('kecamatan', $kecamatan)->with('customer', $customer);
-        // }
     }
 
     public function addtransaksijs(Request $request)
