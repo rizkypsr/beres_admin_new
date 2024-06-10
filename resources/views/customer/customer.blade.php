@@ -1,8 +1,6 @@
 @extends('layout.master')
 
 @section('css')
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.min.css " /> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" /> --}}
     <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
 @endsection
 
@@ -48,8 +46,4 @@
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script type="text/javascript" src="DataTables/datatables.min.js"></script>
-
-
-    {{-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script> --}}
-    {{-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script> --}}
 @endpush
