@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\kota;
+use App\Models\Kecamatan;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -16,7 +16,7 @@ class KecamatanExport implements FromCollection, ShouldAutoSize, WithHeadings, W
     public function headings(): array
     {
         return [
-            'Id',
+            'Id Kecamatan',
             'Kota',
             'Kecamatan',
         ];
@@ -24,15 +24,15 @@ class KecamatanExport implements FromCollection, ShouldAutoSize, WithHeadings, W
 
     public function collection()
     {
-        return kota::with('kecamatan')->get();
+        return Kecamatan::where('status_kecamatan', 0)->with('kota')->orderBy('id_kota_kecamatan')->get();
     }
 
-    public function map($cust): array
+    public function map($data): array
     {
         return [
-            $cust->kecamatan->id_kecamatan,
-            $cust->nama_kota,
-            $cust->kecamatan->nama_kecamatan,
+            $data->id_kecamatan,
+            $data->kota->nama_kota,
+            $data->nama_kecamatan,
         ];
     }
 }
