@@ -29,7 +29,7 @@ class TokoController extends Controller
         if (auth()->user()->role == 'admin') {
             $user = User::find(auth()->user()->id);
             $toko = Customer::with('kecamatan')->where('id_kecamatan_customer', $user->id_kecamatan_user)->where('role_customer', 'toko')->get();
-            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user);
+            $kecamatan = Kecamatan::where('id_kecamatan', $user->id_kecamatan_user)->get();
 
             return view('toko.toko')->with('toko', $toko)->with('kecamatan', $kecamatan);
         }
