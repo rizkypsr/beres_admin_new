@@ -12,7 +12,7 @@ Domain language is Indonesian: `kota` (city), `kecamatan` (district), `toko` (sh
 
 ## Commands
 
-Local site is served by Flock at http://beres.test — do not run `php artisan serve`. PHP 8.4 is pinned in `.flockrc`. On this machine the shell's `php` is aliased to Laravel Herd (a different PHP version), so run CLI commands with Flock's binary (`~/Library/Application Support/Flock/bin/php artisan ...`) or composer's platform check will fail.
+Local site is served by Laravel Herd at http://beres.test (site isolated to PHP 8.4 via `herd isolate 8.4`) — do not run `php artisan serve`. Use `herd php` / `herd composer` (the shell's `php` is aliased to `herd php`) so the CLI uses the same 8.4 as the site; composer's platform check fails on older PHP.
 
 The app was upgraded in place from Laravel 9 and keeps the legacy structure (`app/Http/Kernel.php`, `app/Console/Kernel.php`, `RouteServiceProvider`, full `config/app.php` provider list); it does not use the Laravel 11+ slim `bootstrap/app.php`.
 
