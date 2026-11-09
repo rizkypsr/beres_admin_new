@@ -23,6 +23,9 @@ class LogTransaksiJsDataTable extends DataTable
             ->addColumn('customer', function (transaksijs $transaksijs) {
                 return $transaksijs->customer->nama;
             })
+            ->addColumn('alamat', function (transaksijs $transaksijs) {
+                return $transaksijs->customer?->alamat_customer;
+            })
             ->addColumn('kecamatan', function (transaksijs $transaksijs) {
                 return $transaksijs->kecamatan->nama_kecamatan;
             })
@@ -63,7 +66,7 @@ class LogTransaksiJsDataTable extends DataTable
             ->setTableId('transaksijs-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-                //->dom('Bfrtip')
+                // ->dom('Bfrtip')
             ->selectStyleSingle();
     }
 
@@ -76,6 +79,7 @@ class LogTransaksiJsDataTable extends DataTable
             Column::make('id_transaksijs')->title('ID'),
             Column::make('customer')->title('Customer'),
             Column::make('kecamatan')->title('Kecamatan'),
+            Column::make('alamat')->name('customer.alamat_customer')->title('Alamat')->defaultContent('-'),
             Column::make('jenis_sampah')->title('Jenis Sampah'),
             Column::make('satuan_js')->title('Satuan'),
             Column::make('jumlah_js')->title('Jumlah'),
