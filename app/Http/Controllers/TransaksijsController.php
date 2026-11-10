@@ -13,6 +13,7 @@ use App\Models\transaksijs;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TransaksijsController extends Controller
@@ -103,29 +104,59 @@ class TransaksijsController extends Controller
         return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
     }
 
+    public function acctransaksijsbulk(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        $query = transaksijs::whereIn('id_transaksijs', $validated['ids'])
+            ->where('status_js', 'belum diproses');
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
+        }
+
+        $count = $query->update(['status_js' => 'sedang diproses']);
+
+        return redirect('/transaksijs')->with('success', "Berhasil memproses {$count} transaksi");
+    }
+
     public function selesaitransaksijs(Request $request, $id)
     {
+        // Credits the customer's saldo exactly once: the row lock plus the status check make a
+        // repeated request (double-click, refresh, retry) a no-op, and the transaction keeps the
+        // status change, saldo and topup log all-or-nothing.
+        $done = DB::transaction(function () use ($id) {
+            $tjs = transaksijs::whereKey($id)->lockForUpdate()->first();
 
-        $tjs = transaksijs::find($id);
-        $customer = Customer::find($tjs->id_cs_js);
+            if (! $tjs || $tjs->status_js != 'sedang diproses') {
+                return false;
+            }
 
-        $tjs->status_js = 'selesai';
+            $customer = Customer::withTrashed()->whereKey($tjs->id_cs_js)->lockForUpdate()->firstOrFail();
 
-        $tjs->save();
+            $tjs->status_js = 'selesai';
+            $tjs->save();
 
-        $saldoawal = $customer->saldo_customer;
-        $saldotopup = $tjs->total_js;
-        $saldoakhir = $saldoawal + $saldotopup;
-        $customer->saldo_customer = $saldoakhir;
-        $customer->save();
+            $customer->saldo_customer = $customer->saldo_customer + $tjs->total_js;
+            $customer->save();
 
-        $topup = new topup;
-        $topup->nama_customer_topup = $customer->nama;
-        $topup->id_kecamatan_topup = $tjs->id_kc_js;
-        $topup->tanggal_topup = Carbon::now();
-        $topup->nominal_topup = $tjs->total_js;
-        $topup->total_saldo_topup = $customer->saldo_customer;
-        $topup->save();
+            $topup = new topup;
+            $topup->nama_customer_topup = $customer->nama;
+            $topup->id_kecamatan_topup = $tjs->id_kc_js;
+            $topup->tanggal_topup = Carbon::now();
+            $topup->nominal_topup = $tjs->total_js;
+            $topup->total_saldo_topup = $customer->saldo_customer;
+            $topup->save();
+
+            return true;
+        });
+
+        if (! $done) {
+            return redirect('/transaksijs')->with('warning', 'Transaksi sudah selesai atau belum diproses');
+        }
 
         return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
     }

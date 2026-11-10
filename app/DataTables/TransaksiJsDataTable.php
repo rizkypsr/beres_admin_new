@@ -20,6 +20,14 @@ class TransaksiJsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('checkbox', function (transaksijs $transaksijs) {
+                if ($transaksijs->status_js != 'belum diproses') {
+                    return '';
+                }
+
+                return '<input type="checkbox" class="bulk-proses-check" value="'.$transaksijs->id_transaksijs.'">';
+            })
+            ->rawColumns(['checkbox'], true)
             ->addColumn('customer', function (transaksijs $transaksijs) {
                 return $transaksijs->customer->nama;
             })
@@ -93,6 +101,10 @@ class TransaksiJsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false),
             Column::make('status')->title('Status'),
+            Column::computed('checkbox')
+                ->title('<input type="checkbox" id="bulk-proses-all" title="Pilih semua di halaman ini">')
+                ->exportable(false)
+                ->printable(false),
         ];
     }
 
