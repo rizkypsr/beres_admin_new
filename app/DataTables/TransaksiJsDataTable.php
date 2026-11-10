@@ -100,7 +100,8 @@ class TransaksiJsDataTable extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false),
-            Column::make('status')->title('Status'),
+            Column::make('status')->title('Status')
+                ->exportRender(fn ($row, $data) => strtoupper(trim(strip_tags((string) $data)))),
             Column::computed('checkbox')
                 ->title('<input type="checkbox" id="bulk-proses-all" title="Pilih semua di halaman ini">')
                 ->exportable(false)
