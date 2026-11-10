@@ -2,6 +2,15 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
+    <style>
+        .bulk-proses-check,
+        #bulk-proses-all {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+    </style>
 @endsection
 
 @section('content')
