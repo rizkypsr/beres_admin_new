@@ -3,28 +3,13 @@
 namespace App\Exports;
 
 use App\Models\topup;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 /**
  * Mirrors the table on /logtopup (TopupController@index, transaksitopup/topup.blade.php).
  */
-class topupexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
+class topupexport implements StreamableExport
 {
     private int $no = 0;
-
-    public function collection()
-    {
-        $query = topup::with('kecamatan');
-
-        if (auth()->user()->role != 'superadmin') {
-            $query->where('id_kecamatan_topup', auth()->user()->id_kecamatan_user);
-        }
-
-        return $query->get();
-    }
 
     public function headings(): array
     {
@@ -36,6 +21,19 @@ class topupexport implements FromCollection, ShouldAutoSize, WithHeadings, WithM
             'Nominal',
             'Total Saldo',
         ];
+    }
+
+    public function rows(): iterable
+    {
+        $query = topup::with('kecamatan');
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kecamatan_topup', auth()->user()->id_kecamatan_user);
+        }
+
+        foreach ($query->lazy(1000) as $data) {
+            yield $this->map($data);
+        }
     }
 
     public function map($data): array

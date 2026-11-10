@@ -12,6 +12,9 @@ use Yajra\DataTables\Services\DataTable;
 
 class TransaksiJsDataTable extends DataTable
 {
+    // Built-in ?action=excel|csv|pdf|print exports load every row into memory (OOM at 128M); use the streamed export routes instead.
+    protected array $actions = [];
+
     /**
      * Build DataTable class.
      *
@@ -59,13 +62,13 @@ class TransaksiJsDataTable extends DataTable
         $user = User::find(auth()->user()->id);
 
         if (auth()->user()->role == 'superadmin') {
-            return $model->with(['kecamatan', 'customer', 'produkjs'])->orderBy('created_at', 'desc');
+            return $model->with(['kecamatan', 'customer', 'produkjs'])->orderBy('created_at', 'desc')->orderBy('id_transaksijs');
         }
 
         // if role is admin
         return $model->with(['kecamatan', 'customer', 'produkjs'])
             ->where('id_kc_js', $user->id_kecamatan_user)
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')->orderBy('id_transaksijs');
     }
 
     /**
@@ -100,8 +103,7 @@ class TransaksiJsDataTable extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false),
-            Column::make('status')->title('Status')
-                ->exportRender(fn ($row, $data) => strtoupper(trim(strip_tags((string) $data)))),
+            Column::make('status')->title('Status'),
             Column::computed('checkbox')
                 ->title('<input type="checkbox" id="bulk-proses-all" title="Pilih semua di halaman ini">')
                 ->exportable(false)

@@ -30,6 +30,6 @@ class BayartokoController extends Controller
 
     public function export()
     {
-        return Excel::download(new bayartokoexport, 'bayartoko.xlsx');
+        return \App\Exports\XlsxStream::download(new bayartokoexport, 'bayartoko.xlsx');
     }
 }

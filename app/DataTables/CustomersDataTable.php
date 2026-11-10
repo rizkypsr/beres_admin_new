@@ -12,6 +12,9 @@ use Yajra\DataTables\Services\DataTable;
 
 class CustomersDataTable extends DataTable
 {
+    // Built-in ?action=excel|csv|pdf|print exports load every row into memory (OOM at 128M); use the streamed export routes instead.
+    protected array $actions = [];
+
     /**
      * Build DataTable class.
      *

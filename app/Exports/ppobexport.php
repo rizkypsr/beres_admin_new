@@ -3,22 +3,13 @@
 namespace App\Exports;
 
 use App\Models\transaksippob;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 /**
  * Mirrors the table on /logppob (TransaksippobController@ppob, transaksippob/logtransaksippob.blade.php).
  */
-class ppobexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
+class ppobexport implements StreamableExport
 {
     private int $no = 0;
-
-    public function collection()
-    {
-        return transaksippob::with('customer')->get();
-    }
 
     public function headings(): array
     {
@@ -32,6 +23,13 @@ class ppobexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMa
             'Tanggal',
             'Status',
         ];
+    }
+
+    public function rows(): iterable
+    {
+        foreach (transaksippob::with('customer')->lazy(1000) as $data) {
+            yield $this->map($data);
+        }
     }
 
     public function map($data): array

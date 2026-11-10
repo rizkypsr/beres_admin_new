@@ -25,7 +25,7 @@ class TransaksijsController extends Controller
 
     public function export()
     {
-        return Excel::download(new transaksijsexport, 'transaksijs.xlsx');
+        return \App\Exports\XlsxStream::download(new transaksijsexport, 'transaksijs.xlsx');
     }
 
     public function log(LogTransaksiJsDataTable $dataTable)

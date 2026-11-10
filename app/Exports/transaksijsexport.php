@@ -3,21 +3,19 @@
 namespace App\Exports;
 
 use App\Models\transaksijs;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 /**
- * Mirrors the columns and role scoping of LogTransaksiJsDataTable (/logtransaksijs).
+ * Mirrors the columns and role scoping of the jual sampah tables (/transaksijs, /logtransaksijs).
  */
-class transaksijsexport implements FromQuery, ShouldAutoSize, WithHeadings, WithMapping
+class transaksijsexport implements StreamableExport
 {
     public function query()
     {
         $query = transaksijs::query()
             ->with(['kecamatan', 'customer', 'produkjs'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+            // Tie-breaker so chunked reads never skip or repeat rows sharing a timestamp.
+            ->orderBy('id_transaksijs');
 
         if (auth()->user()->role != 'superadmin') {
             $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
@@ -41,6 +39,13 @@ class transaksijsexport implements FromQuery, ShouldAutoSize, WithHeadings, With
             'Tanggal',
             'Status',
         ];
+    }
+
+    public function rows(): iterable
+    {
+        foreach ($this->query()->lazy(1000) as $data) {
+            yield $this->map($data);
+        }
     }
 
     public function map($data): array

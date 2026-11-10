@@ -27,7 +27,7 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahtransaksijs"><i
                                 class="fas fa-plus"></i> Tambah Transaksi Jual Sampah </button>
                         @include('transaksijs.addtransaksijs')
-                        <a href="/transaksijs?action=excel" class="btn btn-success"><i class="fas fa-file-excel"></i>
+                        <a href="/jualsampahexport" class="btn btn-success"><i class="fas fa-file-excel"></i>
                             Export Excel</a>
                         <form id="bulk-proses-form" action="/accjsbulk" method="POST" class="d-inline">
                             @csrf

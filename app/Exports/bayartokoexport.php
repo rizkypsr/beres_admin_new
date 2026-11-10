@@ -3,27 +3,12 @@
 namespace App\Exports;
 
 use App\Models\bayartoko;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 /**
  * Mirrors the table on /logbayartoko (BayartokoController@index, bayartoko/bayartoko.blade.php).
  */
-class bayartokoexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
+class bayartokoexport implements StreamableExport
 {
-    public function collection()
-    {
-        $query = bayartoko::with(['kecamatan', 'customer', 'customertoko']);
-
-        if (auth()->user()->role != 'superadmin') {
-            $query->where('id_kecamatan_bayar', auth()->user()->id_kecamatan_user);
-        }
-
-        return $query->get();
-    }
-
     public function headings(): array
     {
         return [
@@ -34,6 +19,19 @@ class bayartokoexport implements FromCollection, ShouldAutoSize, WithHeadings, W
             'Tanggal',
             'Nominal',
         ];
+    }
+
+    public function rows(): iterable
+    {
+        $query = bayartoko::with(['kecamatan', 'customer', 'customertoko']);
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kecamatan_bayar', auth()->user()->id_kecamatan_user);
+        }
+
+        foreach ($query->lazy(1000) as $data) {
+            yield $this->map($data);
+        }
     }
 
     public function map($data): array

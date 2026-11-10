@@ -3,28 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Transfer;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 /**
  * Mirrors the table on /logtransfer (TransferController@index, transfer/transfer.blade.php).
  */
-class transferexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
+class transferexport implements StreamableExport
 {
     private int $no = 0;
-
-    public function collection()
-    {
-        $query = Transfer::with(['kecamatan', 'customer', 'customerpenerima']);
-
-        if (auth()->user()->role != 'superadmin') {
-            $query->where('id_kecamatan_transfer', auth()->user()->id_kecamatan_user);
-        }
-
-        return $query->get();
-    }
 
     public function headings(): array
     {
@@ -36,6 +21,19 @@ class transferexport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
             'Tanggal',
             'Nominal',
         ];
+    }
+
+    public function rows(): iterable
+    {
+        $query = Transfer::with(['kecamatan', 'customer', 'customerpenerima']);
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kecamatan_transfer', auth()->user()->id_kecamatan_user);
+        }
+
+        foreach ($query->lazy(1000) as $data) {
+            yield $this->map($data);
+        }
     }
 
     public function map($data): array
