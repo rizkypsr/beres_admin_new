@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\topup;
+use App\Support\Wib;
 
 /**
  * Mirrors the table on /logtopup (TopupController@index, transaksitopup/topup.blade.php).
@@ -42,7 +43,7 @@ class topupexport implements StreamableExport
             ++$this->no,
             $data->nama_customer_topup,
             $data->kecamatan?->nama_kecamatan,
-            $data->tanggal_topup,
+            Wib::format($data->tanggal_topup),
             $data->nominal_topup,
             $data->total_saldo_topup,
         ];

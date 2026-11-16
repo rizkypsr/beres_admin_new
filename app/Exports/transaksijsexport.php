@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\transaksijs;
+use App\Support\Wib;
 
 /**
  * Mirrors the columns and role scoping of the jual sampah tables (/transaksijs, /logtransaksijs).
@@ -60,7 +61,7 @@ class transaksijsexport implements StreamableExport
             $data->jumlah_js,
             $data->harga_js,
             $data->total_js,
-            $data->created_at,
+            Wib::format($data->created_at),
             strtoupper((string) $data->status_js),
         ];
     }

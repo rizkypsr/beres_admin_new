@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\transaksijs;
 use App\Models\User;
+use App\Support\Wib;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -23,6 +24,7 @@ class LogTransaksiJsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->editColumn('created_at', fn (transaksijs $transaksijs) => Wib::format($transaksijs->created_at))
             ->addColumn('customer', function (transaksijs $transaksijs) {
                 return $transaksijs->customer->nama;
             })
