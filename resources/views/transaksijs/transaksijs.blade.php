@@ -292,8 +292,8 @@
                 });
             }));
 
-            // "... Semua" buttons. Selesai/Hapus Semua touch every matching transaction (money or
-            // permanent deletion), so they ask the user to type a word to confirm.
+            // "... Semua" buttons. Hapus Semua permanently deletes every matching transaction, so it
+            // asks the user to type a word to confirm.
             const allDialogs = {
                 proses: f => ({
                     title: 'Proses semua ' + f.dataset.count + ' transaksi?',
@@ -305,9 +305,8 @@
                     title: 'Selesaikan semua ' + f.dataset.count + ' transaksi?',
                     html: 'Semua transaksi "sedang diproses" (semua halaman) akan diselesaikan dan saldo customer ' +
                         'ditambahkan.<br>Total saldo yang dikreditkan: <b>' + rupiah(parseFloat(f.dataset.total) || 0) +
-                        '</b><br><br>Ketik <b>SELESAI</b> untuk melanjutkan.',
+                        '</b>',
                     icon: 'warning',
-                    confirmWord: 'SELESAI',
                     confirmButtonText: 'Selesaikan semua',
                 }),
                 hapus: f => ({
