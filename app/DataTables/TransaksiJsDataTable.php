@@ -24,11 +24,17 @@ class TransaksiJsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('checkbox', function (transaksijs $transaksijs) {
-                if ($transaksijs->status_js != 'belum diproses') {
+                // Finished transactions have no actions left, so nothing to select.
+                if (! in_array($transaksijs->status_js, ['belum diproses', 'sedang diproses'])) {
                     return '';
                 }
 
-                return '<input type="checkbox" class="bulk-proses-check" value="'.$transaksijs->id_transaksijs.'">';
+                return sprintf(
+                    '<input type="checkbox" class="bulk-check" value="%d" data-status="%s" data-total="%s">',
+                    $transaksijs->id_transaksijs,
+                    e($transaksijs->status_js),
+                    e($transaksijs->total_js),
+                );
             })
             ->rawColumns(['checkbox'], true)
             ->addColumn('customer', function (transaksijs $transaksijs) {
@@ -105,7 +111,7 @@ class TransaksiJsDataTable extends DataTable
                 ->printable(false),
             Column::make('status')->title('Status'),
             Column::computed('checkbox')
-                ->title('<input type="checkbox" id="bulk-proses-all" title="Pilih semua di halaman ini">')
+                ->title('<input type="checkbox" id="bulk-check-all" title="Pilih semua di halaman ini">')
                 ->exportable(false)
                 ->printable(false),
         ];

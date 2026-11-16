@@ -3,8 +3,8 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
     <style>
-        .bulk-proses-check,
-        #bulk-proses-all {
+        .bulk-check,
+        #bulk-check-all {
             width: 22px;
             height: 22px;
             cursor: pointer;
@@ -29,15 +29,26 @@
                         @include('transaksijs.addtransaksijs')
                         <a href="/jualsampahexport" class="btn btn-success"><i class="fas fa-file-excel"></i>
                             Export Excel</a>
-                        <form id="bulk-proses-form" action="/accjsbulk" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" id="bulk-proses-btn" class="btn btn-warning" disabled>
-                                <span id="bulk-proses-spinner" class="spinner-border spinner-border-sm d-none"
-                                    role="status" aria-hidden="true"></span>
-                                <span id="bulk-proses-label">Proses Terpilih (<span id="bulk-proses-count">0</span>)</span>
-                                <span id="bulk-proses-loading" class="d-none">Memproses...</span>
-                            </button>
-                        </form>
+                        {{-- Bulk actions on the checked rows; each only sends the rows its status allows. --}}
+                        @foreach ([
+                            ['action' => '/accjsbulk', 'method' => null, 'class' => 'btn-warning', 'statuses' => 'belum diproses', 'label' => 'Proses Terpilih', 'kind' => 'proses'],
+                            ['action' => '/selesaijsbulk', 'method' => null, 'class' => 'btn-success', 'statuses' => 'sedang diproses', 'label' => 'Selesai Terpilih', 'kind' => 'selesai'],
+                            ['action' => '/deletetransaksijsbulk', 'method' => 'DELETE', 'class' => 'btn-danger', 'statuses' => 'belum diproses,sedang diproses', 'label' => 'Hapus Terpilih', 'kind' => 'hapus'],
+                        ] as $bulk)
+                            <form action="{{ $bulk['action'] }}" method="POST" class="d-inline bulk-form"
+                                data-kind="{{ $bulk['kind'] }}" data-statuses="{{ $bulk['statuses'] }}">
+                                @csrf
+                                @if ($bulk['method'])
+                                    @method($bulk['method'])
+                                @endif
+                                <button type="submit" class="btn {{ $bulk['class'] }}" disabled>
+                                    <span class="bulk-spinner spinner-border spinner-border-sm d-none" role="status"
+                                        aria-hidden="true"></span>
+                                    <span class="bulk-label">{{ $bulk['label'] }} (<span class="bulk-count">0</span>)</span>
+                                    <span class="bulk-loading d-none">Memproses...</span>
+                                </button>
+                            </form>
+                        @endforeach
                     </div>
 
                     <div class="card-body">
@@ -123,70 +134,107 @@
             });
         })();
 
-        // Bulk "Proses": selected IDs survive paging/search because the table redraws via AJAX.
+        // Bulk Proses / Selesai / Hapus. Selected rows (id => status, total) survive paging and search,
+        // because the table redraws via AJAX; each button counts and sends only the rows it applies to.
         (function() {
-            const selected = new Set();
+            const selected = new Map();
             let submitting = false;
             const table = document.getElementById('transaksijs-table');
-            const form = document.getElementById('bulk-proses-form');
-            const btn = document.getElementById('bulk-proses-btn');
-            const count = document.getElementById('bulk-proses-count');
+            const forms = [...document.querySelectorAll('.bulk-form')];
+            const rupiah = n => 'Rp ' + n.toLocaleString('id-ID');
+
+            const dialogs = {
+                proses: rows => ({
+                    title: 'Proses ' + rows.length + ' transaksi?',
+                    text: 'Status transaksi yang dipilih akan diubah menjadi "sedang diproses".',
+                    icon: 'warning',
+                    confirmButtonText: 'Ya, proses',
+                }),
+                selesai: rows => ({
+                    title: 'Selesaikan ' + rows.length + ' transaksi?',
+                    html: 'Saldo customer akan ditambahkan sesuai total tiap transaksi.<br>' +
+                        'Total saldo yang dikreditkan: <b>' +
+                        rupiah(rows.reduce((sum, r) => sum + (parseFloat(r.total) || 0), 0)) + '</b>',
+                    icon: 'warning',
+                    confirmButtonText: 'Ya, selesai',
+                }),
+                hapus: rows => ({
+                    title: 'Hapus ' + rows.length + ' transaksi?',
+                    text: 'Transaksi akan dihapus permanen dan tidak bisa dikembalikan.',
+                    icon: 'error',
+                    confirmButtonText: 'Ya, hapus',
+                    confirmButtonColor: '#d33',
+                }),
+            };
 
             function pageChecks() {
-                return table.querySelectorAll('tbody .bulk-proses-check');
+                return table.querySelectorAll('tbody .bulk-check');
+            }
+
+            function rowsFor(form) {
+                const statuses = form.dataset.statuses.split(',');
+                return [...selected.entries()]
+                    .filter(([, row]) => statuses.includes(row.status))
+                    .map(([id, row]) => ({ id, ...row }));
             }
 
             function sync() {
                 const checks = pageChecks();
                 checks.forEach(c => c.checked = selected.has(c.value));
-                const all = document.getElementById('bulk-proses-all');
+                const all = document.getElementById('bulk-check-all');
                 if (all) {
                     all.checked = checks.length > 0 && [...checks].every(c => c.checked);
                 }
-                count.textContent = selected.size;
-                btn.disabled = submitting || selected.size === 0;
+                forms.forEach(form => {
+                    const n = rowsFor(form).length;
+                    form.querySelector('.bulk-count').textContent = n;
+                    form.querySelector('button').disabled = submitting || n === 0;
+                });
             }
 
-            function setLoading(on) {
+            function toggle(check, on) {
+                on ? selected.set(check.value, { status: check.dataset.status, total: check.dataset.total })
+                    : selected.delete(check.value);
+            }
+
+            function setLoading(form, on) {
                 submitting = on;
-                document.getElementById('bulk-proses-spinner').classList.toggle('d-none', !on);
-                document.getElementById('bulk-proses-loading').classList.toggle('d-none', !on);
-                document.getElementById('bulk-proses-label').classList.toggle('d-none', on);
-                table.querySelectorAll('.bulk-proses-check, #bulk-proses-all').forEach(c => c.disabled = on);
+                form.querySelector('.bulk-spinner').classList.toggle('d-none', !on);
+                form.querySelector('.bulk-loading').classList.toggle('d-none', !on);
+                form.querySelector('.bulk-label').classList.toggle('d-none', on);
+                table.querySelectorAll('.bulk-check, #bulk-check-all').forEach(c => c.disabled = on);
                 sync();
             }
 
             document.addEventListener('change', function(e) {
-                if (e.target.classList.contains('bulk-proses-check')) {
-                    e.target.checked ? selected.add(e.target.value) : selected.delete(e.target.value);
+                if (e.target.classList.contains('bulk-check')) {
+                    toggle(e.target, e.target.checked);
                     sync();
-                } else if (e.target.id === 'bulk-proses-all') {
-                    pageChecks().forEach(c => e.target.checked ? selected.add(c.value) : selected.delete(c.value));
+                } else if (e.target.id === 'bulk-check-all') {
+                    pageChecks().forEach(c => toggle(c, e.target.checked));
                     sync();
                 }
             });
 
             // Clicking the checkbox should not also toggle DataTables row selection.
             document.addEventListener('click', function(e) {
-                if (e.target.matches('.bulk-proses-check, #bulk-proses-all')) {
+                if (e.target.matches('.bulk-check, #bulk-check-all')) {
                     e.stopPropagation();
                 }
             }, true);
 
             new MutationObserver(sync).observe(table, { childList: true, subtree: true });
 
-            form.addEventListener('submit', function(e) {
+            forms.forEach(form => form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                if (submitting || selected.size === 0) {
+                const rows = rowsFor(form);
+                if (submitting || rows.length === 0) {
                     return;
                 }
 
                 Swal.fire({
-                    title: 'Proses ' + selected.size + ' transaksi?',
-                    text: 'Status transaksi yang dipilih akan diubah menjadi "sedang diproses".',
-                    icon: 'warning',
+                    ...dialogs[form.dataset.kind](rows),
                     showCancelButton: true,
-                    confirmButtonText: 'Ya, proses',
                     cancelButtonText: 'Batal',
                     reverseButtons: true,
                     focusCancel: true,
@@ -196,15 +244,15 @@
                     }
 
                     form.querySelectorAll('input[name="ids[]"]').forEach(i => i.remove());
-                    selected.forEach(id => {
+                    rows.forEach(row => {
                         const input = document.createElement('input');
                         input.type = 'hidden';
                         input.name = 'ids[]';
-                        input.value = id;
+                        input.value = row.id;
                         form.appendChild(input);
                     });
 
-                    setLoading(true);
+                    setLoading(form, true);
                     Swal.fire({
                         title: 'Memproses...',
                         text: 'Mohon tunggu, jangan tutup halaman ini.',
@@ -215,12 +263,12 @@
                     });
                     form.submit();
                 });
-            });
+            }));
 
             // Back/forward cache can restore the page mid-loading; reset it.
             window.addEventListener('pageshow', function(e) {
                 if (e.persisted) {
-                    setLoading(false);
+                    forms.forEach(form => setLoading(form, false));
                     Swal.close();
                 }
             });

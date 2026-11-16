@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\LogTransaksiJsDataTable;
 use App\DataTables\TransaksiJsDataTable;
 use App\Exports\transaksijsexport;
+use App\Exports\XlsxStream;
 use App\Models\Customer;
 use App\Models\Kecamatan;
 use App\Models\produkjs;
@@ -14,7 +15,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
 class TransaksijsController extends Controller
 {
@@ -25,7 +25,7 @@ class TransaksijsController extends Controller
 
     public function export()
     {
-        return \App\Exports\XlsxStream::download(new transaksijsexport, 'transaksijs.xlsx');
+        return XlsxStream::download(new transaksijsexport, 'transaksijs.xlsx');
     }
 
     public function log(LogTransaksiJsDataTable $dataTable)
@@ -123,15 +123,80 @@ class TransaksijsController extends Controller
         return redirect('/transaksijs')->with('success', "Berhasil memproses {$count} transaksi");
     }
 
+    public function deletetransaksijsbulk(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        // Same rule as the row button: finished transactions (saldo already credited) can't be deleted.
+        $query = transaksijs::whereIn('id_transaksijs', $validated['ids'])
+            ->whereIn('status_js', ['belum diproses', 'sedang diproses']);
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
+        }
+
+        $count = $query->delete();
+
+        return redirect('/transaksijs')->with('success', "Berhasil menghapus {$count} transaksi");
+    }
+
     public function selesaitransaksijs(Request $request, $id)
     {
-        // Credits the customer's saldo exactly once: the row lock plus the status check make a
-        // repeated request (double-click, refresh, retry) a no-op, and the transaction keeps the
-        // status change, saldo and topup log all-or-nothing.
-        $done = DB::transaction(function () use ($id) {
+        if (! $this->completeTransaksi($id)) {
+            return redirect('/transaksijs')->with('warning', 'Transaksi sudah selesai atau belum diproses');
+        }
+
+        return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
+    }
+
+    public function selesaitransaksijsbulk(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        $ids = array_unique($validated['ids']);
+        $done = 0;
+
+        // One transaction per item: a failure on one transaction doesn't undo the ones already credited.
+        foreach ($ids as $id) {
+            try {
+                $done += $this->completeTransaksi($id, scopeToKecamatan: true) ? 1 : 0;
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
+        $skipped = count($ids) - $done;
+        $message = "Berhasil menyelesaikan {$done} transaksi";
+
+        if ($skipped > 0) {
+            return redirect('/transaksijs')->with('warning', "{$message}, {$skipped} dilewati (sudah selesai, belum diproses, atau gagal)");
+        }
+
+        return redirect('/transaksijs')->with('success', $message);
+    }
+
+    /**
+     * Credits the customer's saldo exactly once: the row lock plus the status check make a
+     * repeated request (double-click, refresh, retry) a no-op, and the transaction keeps the
+     * status change, saldo and topup log all-or-nothing.
+     */
+    private function completeTransaksi($id, bool $scopeToKecamatan = false): bool
+    {
+        return DB::transaction(function () use ($id, $scopeToKecamatan) {
             $tjs = transaksijs::whereKey($id)->lockForUpdate()->first();
 
             if (! $tjs || $tjs->status_js != 'sedang diproses') {
+                return false;
+            }
+
+            if ($scopeToKecamatan && auth()->user()->role != 'superadmin'
+                && $tjs->id_kc_js != auth()->user()->id_kecamatan_user) {
                 return false;
             }
 
@@ -153,12 +218,6 @@ class TransaksijsController extends Controller
 
             return true;
         });
-
-        if (! $done) {
-            return redirect('/transaksijs')->with('warning', 'Transaksi sudah selesai atau belum diproses');
-        }
-
-        return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
     }
 
     public function totaljualsampah()

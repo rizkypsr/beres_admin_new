@@ -89,6 +89,8 @@ Route::post('/addtransaksijs', [App\Http\Controllers\TransaksijsController::clas
 Route::post('/updatetransaksijs/{id}', [App\Http\Controllers\TransaksijsController::class, 'updatetransaksijs']);
 Route::delete('/deletetransaksijs/{id}', [App\Http\Controllers\TransaksijsController::class, 'deletetransaksijs']);
 Route::post('/accjsbulk', [App\Http\Controllers\TransaksijsController::class, 'acctransaksijsbulk']);
+Route::post('/selesaijsbulk', [App\Http\Controllers\TransaksijsController::class, 'selesaitransaksijsbulk']);
+Route::delete('/deletetransaksijsbulk', [App\Http\Controllers\TransaksijsController::class, 'deletetransaksijsbulk']);
 Route::get('/accjs/{id}', [App\Http\Controllers\TransaksijsController::class, 'acctransaksijs']);
 Route::post('/selesaijs/{id}', [App\Http\Controllers\TransaksijsController::class, 'selesaitransaksijs']);
 Route::get('/total_jualsampah', [App\Http\Controllers\TransaksijsController::class, 'totaljualsampah']);
