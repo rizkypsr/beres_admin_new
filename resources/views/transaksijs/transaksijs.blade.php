@@ -216,6 +216,8 @@
                     form.querySelector('button').disabled = submitting || n === 0;
                     form.querySelector('button').classList.toggle('d-none', n === 0);
                 });
+                // While rows are checked, show only the "Terpilih" actions so "Semua" can't be hit by mistake.
+                document.querySelectorAll('.bulk-all-form button').forEach(b => b.classList.toggle('d-none', selected.size > 0));
             }
 
             function toggle(check, on) {
