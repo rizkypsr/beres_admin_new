@@ -41,13 +41,38 @@
                                 @if ($bulk['method'])
                                     @method($bulk['method'])
                                 @endif
-                                <button type="submit" class="btn {{ $bulk['class'] }}" disabled>
+                                <button type="submit" class="btn {{ $bulk['class'] }} d-none" disabled>
                                     <span class="bulk-spinner spinner-border spinner-border-sm d-none" role="status"
                                         aria-hidden="true"></span>
                                     <span class="bulk-label">{{ $bulk['label'] }} (<span class="bulk-count">0</span>)</span>
                                     <span class="bulk-loading d-none">Memproses...</span>
                                 </button>
                             </form>
+                        @endforeach
+
+                        {{-- "... Semua": every transaction with that status (all pages, own kecamatan for admin). --}}
+                        @foreach ([
+                            ['action' => '/accjsbulk', 'method' => null, 'class' => 'btn-outline-warning', 'count' => $bulkCounts['belum'], 'label' => 'Proses Semua', 'kind' => 'proses'],
+                            ['action' => '/selesaijsbulk', 'method' => null, 'class' => 'btn-outline-success', 'count' => $bulkCounts['sedang'], 'label' => 'Selesai Semua', 'kind' => 'selesai'],
+                            ['action' => '/deletetransaksijsbulk', 'method' => 'DELETE', 'class' => 'btn-outline-danger', 'count' => $bulkCounts['belum'] + $bulkCounts['sedang'], 'label' => 'Hapus Semua', 'kind' => 'hapus'],
+                        ] as $bulk)
+                            @if ($bulk['count'] > 0)
+                                <form action="{{ $bulk['action'] }}" method="POST" class="d-inline bulk-all-form"
+                                    data-kind="{{ $bulk['kind'] }}" data-count="{{ $bulk['count'] }}"
+                                    data-total="{{ $bulk['kind'] == 'selesai' ? $bulkCounts['sedangTotal'] : '' }}">
+                                    @csrf
+                                    @if ($bulk['method'])
+                                        @method($bulk['method'])
+                                    @endif
+                                    <input type="hidden" name="all" value="1">
+                                    <button type="submit" class="btn {{ $bulk['class'] }}">
+                                        <span class="bulk-spinner spinner-border spinner-border-sm d-none" role="status"
+                                            aria-hidden="true"></span>
+                                        <span class="bulk-label">{{ $bulk['label'] }} ({{ $bulk['count'] }})</span>
+                                        <span class="bulk-loading d-none">Memproses...</span>
+                                    </button>
+                                </form>
+                            @endif
                         @endforeach
                     </div>
 
@@ -189,6 +214,7 @@
                     const n = rowsFor(form).length;
                     form.querySelector('.bulk-count').textContent = n;
                     form.querySelector('button').disabled = submitting || n === 0;
+                    form.querySelector('button').classList.toggle('d-none', n === 0);
                 });
             }
 
@@ -203,6 +229,7 @@
                 form.querySelector('.bulk-loading').classList.toggle('d-none', !on);
                 form.querySelector('.bulk-label').classList.toggle('d-none', on);
                 table.querySelectorAll('.bulk-check, #bulk-check-all').forEach(c => c.disabled = on);
+                document.querySelectorAll('.bulk-all-form button').forEach(b => b.disabled = on);
                 sync();
             }
 
@@ -265,10 +292,76 @@
                 });
             }));
 
+            // "... Semua" buttons. Selesai/Hapus Semua touch every matching transaction (money or
+            // permanent deletion), so they ask the user to type a word to confirm.
+            const allDialogs = {
+                proses: f => ({
+                    title: 'Proses semua ' + f.dataset.count + ' transaksi?',
+                    text: 'Semua transaksi "belum diproses" (semua halaman) akan diubah menjadi "sedang diproses".',
+                    icon: 'warning',
+                    confirmButtonText: 'Ya, proses semua',
+                }),
+                selesai: f => ({
+                    title: 'Selesaikan semua ' + f.dataset.count + ' transaksi?',
+                    html: 'Semua transaksi "sedang diproses" (semua halaman) akan diselesaikan dan saldo customer ' +
+                        'ditambahkan.<br>Total saldo yang dikreditkan: <b>' + rupiah(parseFloat(f.dataset.total) || 0) +
+                        '</b><br><br>Ketik <b>SELESAI</b> untuk melanjutkan.',
+                    icon: 'warning',
+                    confirmWord: 'SELESAI',
+                    confirmButtonText: 'Selesaikan semua',
+                }),
+                hapus: f => ({
+                    title: 'Hapus semua ' + f.dataset.count + ' transaksi?',
+                    html: 'Semua transaksi "belum diproses" dan "sedang diproses" (semua halaman) akan dihapus ' +
+                        '<b>permanen</b> dan tidak bisa dikembalikan.<br><br>Ketik <b>HAPUS</b> untuk melanjutkan.',
+                    icon: 'error',
+                    confirmWord: 'HAPUS',
+                    confirmButtonText: 'Hapus semua',
+                    confirmButtonColor: '#d33',
+                }),
+            };
+
+            document.querySelectorAll('.bulk-all-form').forEach(form => form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (submitting) {
+                    return;
+                }
+                const { confirmWord, ...dialog } = allDialogs[form.dataset.kind](form);
+
+                Swal.fire({
+                    ...dialog,
+                    ...(confirmWord ? {
+                        input: 'text',
+                        inputPlaceholder: confirmWord,
+                        inputAttributes: { autocapitalize: 'characters', autocomplete: 'off' },
+                        preConfirm: value => (value || '').trim().toUpperCase() === confirmWord ||
+                            Swal.showValidationMessage('Ketik ' + confirmWord + ' untuk melanjutkan'),
+                    } : {}),
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    focusCancel: !confirmWord,
+                }).then(function(result) {
+                    if (!result.isConfirmed) {
+                        return;
+                    }
+                    setLoading(form, true);
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Mohon tunggu, jangan tutup halaman ini.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => Swal.showLoading(),
+                    });
+                    form.submit();
+                });
+            }));
+
             // Back/forward cache can restore the page mid-loading; reset it.
             window.addEventListener('pageshow', function(e) {
                 if (e.persisted) {
-                    forms.forEach(form => setLoading(form, false));
+                    document.querySelectorAll('.bulk-form, .bulk-all-form').forEach(form => setLoading(form, false));
                     Swal.close();
                 }
             });

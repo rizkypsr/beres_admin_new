@@ -43,7 +43,13 @@ class TransaksijsController extends Controller
         $produkjs = produkjs::where('js_is_delete', 0)->get();
         $customer = Customer::where('customer_is_delete', 0)->get();
 
-        return $dataTable->render('transaksijs.transaksijs', compact('listKecamatan', 'produkjs', 'customer'));
+        $bulkCounts = [
+            'belum' => $this->scopedTransaksi(['belum diproses'])->count(),
+            'sedang' => $this->scopedTransaksi(['sedang diproses'])->count(),
+            'sedangTotal' => (float) $this->scopedTransaksi(['sedang diproses'])->sum('total_js'),
+        ];
+
+        return $dataTable->render('transaksijs.transaksijs', compact('listKecamatan', 'produkjs', 'customer', 'bulkCounts'));
     }
 
     public function addtransaksijs(Request $request)
@@ -106,39 +112,15 @@ class TransaksijsController extends Controller
 
     public function acctransaksijsbulk(Request $request)
     {
-        $validated = $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'integer',
-        ]);
-
-        $query = transaksijs::whereIn('id_transaksijs', $validated['ids'])
-            ->where('status_js', 'belum diproses');
-
-        if (auth()->user()->role != 'superadmin') {
-            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
-        }
-
-        $count = $query->update(['status_js' => 'sedang diproses']);
+        $count = $this->bulkQuery($request, ['belum diproses'])->update(['status_js' => 'sedang diproses']);
 
         return redirect('/transaksijs')->with('success', "Berhasil memproses {$count} transaksi");
     }
 
     public function deletetransaksijsbulk(Request $request)
     {
-        $validated = $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'integer',
-        ]);
-
         // Same rule as the row button: finished transactions (saldo already credited) can't be deleted.
-        $query = transaksijs::whereIn('id_transaksijs', $validated['ids'])
-            ->whereIn('status_js', ['belum diproses', 'sedang diproses']);
-
-        if (auth()->user()->role != 'superadmin') {
-            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
-        }
-
-        $count = $query->delete();
+        $count = $this->bulkQuery($request, ['belum diproses', 'sedang diproses'])->delete();
 
         return redirect('/transaksijs')->with('success', "Berhasil menghapus {$count} transaksi");
     }
@@ -154,12 +136,8 @@ class TransaksijsController extends Controller
 
     public function selesaitransaksijsbulk(Request $request)
     {
-        $validated = $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'integer',
-        ]);
-
-        $ids = array_unique($validated['ids']);
+        $ids = $this->bulkQuery($request, ['sedang diproses'])->pluck('id_transaksijs')->all();
+        $requested = $request->boolean('all') ? count($ids) : count(array_unique($request->input('ids', [])));
         $done = 0;
 
         // One transaction per item: a failure on one transaction doesn't undo the ones already credited.
@@ -171,7 +149,7 @@ class TransaksijsController extends Controller
             }
         }
 
-        $skipped = count($ids) - $done;
+        $skipped = $requested - $done;
         $message = "Berhasil menyelesaikan {$done} transaksi";
 
         if ($skipped > 0) {
@@ -179,6 +157,35 @@ class TransaksijsController extends Controller
         }
 
         return redirect('/transaksijs')->with('success', $message);
+    }
+
+    /**
+     * Transactions the bulk buttons act on: either every transaction with one of $statuses
+     * ("... Semua", all=1) or only the checked ids, always limited to the admin's kecamatan.
+     */
+    private function bulkQuery(Request $request, array $statuses)
+    {
+        if ($request->boolean('all')) {
+            return $this->scopedTransaksi($statuses);
+        }
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        return $this->scopedTransaksi($statuses)->whereIn('id_transaksijs', $validated['ids']);
+    }
+
+    private function scopedTransaksi(array $statuses)
+    {
+        $query = transaksijs::whereIn('status_js', $statuses);
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
+        }
+
+        return $query;
     }
 
     /**
