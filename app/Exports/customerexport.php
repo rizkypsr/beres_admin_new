@@ -3,17 +3,9 @@
 namespace App\Exports;
 
 use App\Models\Customer;
-use Auth;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
-class customerexport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
+class customerexport implements StreamableExport
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function headings(): array
     {
         return [
@@ -30,15 +22,16 @@ class customerexport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
         ];
     }
 
-    public function collection()
+    public function rows(): iterable
     {
-        if (Auth::user()->role == 'superadmin') {
-            return Customer::where('role_customer', 'customer')->with('kecamatan')->get();
+        $query = Customer::where('role_customer', 'customer')->with('kecamatan');
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kecamatan_customer', auth()->user()->id_kecamatan_user);
         }
-        if (Auth::user()->role == 'admin') {
-            return Customer::where('role_customer', 'customer')
-                ->where('id_kecamatan_customer', Auth::user()->id_kecamatan_user)
-                ->with('kecamatan')->get();
+
+        foreach ($query->lazy(1000) as $cust) {
+            yield $this->map($cust);
         }
     }
 
@@ -46,7 +39,7 @@ class customerexport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
     {
         return [
             $cust->id_customer,
-            $cust->kecamatan->nama_kecamatan,
+            $cust->kecamatan?->nama_kecamatan,
             $cust->nama,
             $cust->alamat_customer,
             $cust->saldo_customer,

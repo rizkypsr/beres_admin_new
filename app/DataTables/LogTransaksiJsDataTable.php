@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\transaksijs;
 use App\Models\User;
+use App\Support\Wib;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,6 +13,9 @@ use Yajra\DataTables\Services\DataTable;
 
 class LogTransaksiJsDataTable extends DataTable
 {
+    // Built-in ?action=excel|csv|pdf|print exports load every row into memory (OOM at 128M); use the streamed export routes instead.
+    protected array $actions = [];
+
     /**
      * Build DataTable class.
      *
@@ -20,8 +24,12 @@ class LogTransaksiJsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->editColumn('created_at', fn (transaksijs $transaksijs) => Wib::format($transaksijs->created_at))
             ->addColumn('customer', function (transaksijs $transaksijs) {
                 return $transaksijs->customer->nama;
+            })
+            ->addColumn('alamat', function (transaksijs $transaksijs) {
+                return $transaksijs->customer?->alamat_customer;
             })
             ->addColumn('kecamatan', function (transaksijs $transaksijs) {
                 return $transaksijs->kecamatan->nama_kecamatan;
@@ -45,13 +53,13 @@ class LogTransaksiJsDataTable extends DataTable
         $user = User::find(auth()->user()->id);
 
         if (auth()->user()->role == 'superadmin') {
-            return $model->with(['kecamatan', 'customer', 'produkjs'])->orderBy('created_at', 'desc');
+            return $model->with(['kecamatan', 'customer', 'produkjs'])->orderBy('created_at', 'desc')->orderBy('id_transaksijs');
         }
 
         // if role is admin
         return $model->with(['kecamatan', 'customer', 'produkjs'])
             ->where('id_kc_js', $user->id_kecamatan_user)
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')->orderBy('id_transaksijs');
     }
 
     /**
@@ -63,7 +71,7 @@ class LogTransaksiJsDataTable extends DataTable
             ->setTableId('transaksijs-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-                //->dom('Bfrtip')
+                // ->dom('Bfrtip')
             ->selectStyleSingle();
     }
 
@@ -76,6 +84,7 @@ class LogTransaksiJsDataTable extends DataTable
             Column::make('id_transaksijs')->title('ID'),
             Column::make('customer')->title('Customer'),
             Column::make('kecamatan')->title('Kecamatan'),
+            Column::make('alamat')->name('customer.alamat_customer')->title('Alamat')->defaultContent('-'),
             Column::make('jenis_sampah')->title('Jenis Sampah'),
             Column::make('satuan_js')->title('Satuan'),
             Column::make('jumlah_js')->title('Jumlah'),

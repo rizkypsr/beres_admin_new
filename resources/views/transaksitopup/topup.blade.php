@@ -52,7 +52,7 @@
                           <th>{{ $no++}}</th>
                           <td>{{ $data->nama_customer_topup}}</td>
                           <td>{{ $data->kecamatan->nama_kecamatan}}</td>
-                          <td>{{ $data->tanggal_topup}}</td>
+                          <td>{{ \App\Support\Wib::format($data->tanggal_topup) }}</td>
                           <td>{{ $data->nominal_topup}}</td>
                           <td>{{ $data->total_saldo_topup}}</td>
                           

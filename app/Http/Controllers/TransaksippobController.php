@@ -124,7 +124,7 @@ class TransaksippobController extends Controller
 
     public function export()
     {
-        return Excel::download(new ppobexport, 'transaksippob.xlsx');
+        return \App\Exports\XlsxStream::download(new ppobexport, 'transaksippob.xlsx');
     }
 
     public function totalppob()

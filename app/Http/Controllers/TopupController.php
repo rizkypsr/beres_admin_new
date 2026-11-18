@@ -30,6 +30,6 @@ class TopupController extends Controller
 
     public function export()
     {
-        return Excel::download(new topupexport, 'topup.xlsx');
+        return \App\Exports\XlsxStream::download(new topupexport, 'topup.xlsx');
     }
 }

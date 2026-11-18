@@ -197,7 +197,7 @@ class CustomerController extends Controller
 
     public function exportcustomer()
     {
-        return Excel::download(new customerexport, 'customer.xlsx');
+        return \App\Exports\XlsxStream::download(new customerexport, 'customer.xlsx');
     }
 
     public function exporttoko()

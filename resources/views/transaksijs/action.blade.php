@@ -1,24 +1,23 @@
+{{-- Confirmation is handled by the [data-confirm] handler in transaksijs.blade.php (SweetAlert). --}}
 <div class="d-flex justify-content-center gap-3">
-    @if ($data->status_js == 'belum diproses')
-        <form action="/deletetransaksijs/{{ $data->id_transaksijs }}" method="post" class="align-self-center">
+    @if (in_array($data->status_js, ['belum diproses', 'sedang diproses']))
+        <form action="/deletetransaksijs/{{ $data->id_transaksijs }}" method="post" class="align-self-center"
+            data-confirm="Yakin ingin menghapus transaksi ini?" data-confirm-button="Ya, hapus">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"
-                    onclick="return confirm('yakin ingin menghapus data ?')"></i>
-            </button>
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
         </form>
-        <a href="/accjs/{{ $data->id_transaksijs }}" class="btn btn-warning align-self-center "
-            onclick="return confirm('yakin ingin lanjut ?')"></i> Proses</a>
+    @endif
+    @if ($data->status_js == 'belum diproses')
+        <a href="/accjs/{{ $data->id_transaksijs }}" class="btn btn-warning align-self-center"
+            data-confirm="Proses transaksi ini?" data-confirm-button="Ya, proses">Proses</a>
     @endif
     @if ($data->status_js == 'sedang diproses')
-        <form action="/deletetransaksijs/{{ $data->id_transaksijs }}" method="post" class="align-self-center">
+        <form action="/selesaijs/{{ $data->id_transaksijs }}" method="post" class="align-self-center"
+            data-confirm="Selesaikan transaksi ini? Saldo customer akan ditambahkan."
+            data-confirm-button="Ya, selesai">
             @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"
-                    onclick="return confirm('yakin ingin menghapus data ?')"></i>
-            </button>
+            <button type="submit" class="btn btn-success">Selesai</button>
         </form>
-        <a href="/selesaijs/{{ $data->id_transaksijs }}" class="btn btn-success align-self-center"
-            onclick="return confirm('yakin ingin selesai ?')"></i> Selesai </a>
     @endif
 </div>

@@ -30,6 +30,6 @@ class TransferController extends Controller
 
     public function export()
     {
-        return Excel::download(new transferexport, 'transfer.xlsx');
+        return \App\Exports\XlsxStream::download(new transferexport, 'transfer.xlsx');
     }
 }

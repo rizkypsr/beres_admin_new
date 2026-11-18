@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\LogTransaksiJsDataTable;
 use App\DataTables\TransaksiJsDataTable;
 use App\Exports\transaksijsexport;
+use App\Exports\XlsxStream;
 use App\Models\Customer;
 use App\Models\Kecamatan;
 use App\Models\produkjs;
@@ -13,7 +14,7 @@ use App\Models\transaksijs;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class TransaksijsController extends Controller
 {
@@ -24,7 +25,7 @@ class TransaksijsController extends Controller
 
     public function export()
     {
-        return Excel::download(new transaksijsexport, 'transaksijs.xlsx');
+        return XlsxStream::download(new transaksijsexport, 'transaksijs.xlsx');
     }
 
     public function log(LogTransaksiJsDataTable $dataTable)
@@ -42,7 +43,13 @@ class TransaksijsController extends Controller
         $produkjs = produkjs::where('js_is_delete', 0)->get();
         $customer = Customer::where('customer_is_delete', 0)->get();
 
-        return $dataTable->render('transaksijs.transaksijs', compact('listKecamatan', 'produkjs', 'customer'));
+        $bulkCounts = [
+            'belum' => $this->scopedTransaksi(['belum diproses'])->count(),
+            'sedang' => $this->scopedTransaksi(['sedang diproses'])->count(),
+            'sedangTotal' => (float) $this->scopedTransaksi(['sedang diproses'])->sum('total_js'),
+        ];
+
+        return $dataTable->render('transaksijs.transaksijs', compact('listKecamatan', 'produkjs', 'customer', 'bulkCounts'));
     }
 
     public function addtransaksijs(Request $request)
@@ -103,31 +110,121 @@ class TransaksijsController extends Controller
         return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
     }
 
+    public function acctransaksijsbulk(Request $request)
+    {
+        $count = $this->bulkQuery($request, ['belum diproses'])->update(['status_js' => 'sedang diproses']);
+
+        return redirect('/transaksijs')->with('success', "Berhasil memproses {$count} transaksi");
+    }
+
+    public function deletetransaksijsbulk(Request $request)
+    {
+        // Same rule as the row button: finished transactions (saldo already credited) can't be deleted.
+        $count = $this->bulkQuery($request, ['belum diproses', 'sedang diproses'])->delete();
+
+        return redirect('/transaksijs')->with('success', "Berhasil menghapus {$count} transaksi");
+    }
+
     public function selesaitransaksijs(Request $request, $id)
     {
-
-        $tjs = transaksijs::find($id);
-        $customer = Customer::find($tjs->id_cs_js);
-
-        $tjs->status_js = 'selesai';
-
-        $tjs->save();
-
-        $saldoawal = $customer->saldo_customer;
-        $saldotopup = $tjs->total_js;
-        $saldoakhir = $saldoawal + $saldotopup;
-        $customer->saldo_customer = $saldoakhir;
-        $customer->save();
-
-        $topup = new topup;
-        $topup->nama_customer_topup = $customer->nama;
-        $topup->id_kecamatan_topup = $tjs->id_kc_js;
-        $topup->tanggal_topup = Carbon::now();
-        $topup->nominal_topup = $tjs->total_js;
-        $topup->total_saldo_topup = $customer->saldo_customer;
-        $topup->save();
+        if (! $this->completeTransaksi($id)) {
+            return redirect('/transaksijs')->with('warning', 'Transaksi sudah selesai atau belum diproses');
+        }
 
         return redirect('/transaksijs')->with('success', 'Berhasil Update produk');
+    }
+
+    public function selesaitransaksijsbulk(Request $request)
+    {
+        $ids = $this->bulkQuery($request, ['sedang diproses'])->pluck('id_transaksijs')->all();
+        $requested = $request->boolean('all') ? count($ids) : count(array_unique($request->input('ids', [])));
+        $done = 0;
+
+        // One transaction per item: a failure on one transaction doesn't undo the ones already credited.
+        foreach ($ids as $id) {
+            try {
+                $done += $this->completeTransaksi($id, scopeToKecamatan: true) ? 1 : 0;
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
+        $skipped = $requested - $done;
+        $message = "Berhasil menyelesaikan {$done} transaksi";
+
+        if ($skipped > 0) {
+            return redirect('/transaksijs')->with('warning', "{$message}, {$skipped} dilewati (sudah selesai, belum diproses, atau gagal)");
+        }
+
+        return redirect('/transaksijs')->with('success', $message);
+    }
+
+    /**
+     * Transactions the bulk buttons act on: either every transaction with one of $statuses
+     * ("... Semua", all=1) or only the checked ids, always limited to the admin's kecamatan.
+     */
+    private function bulkQuery(Request $request, array $statuses)
+    {
+        if ($request->boolean('all')) {
+            return $this->scopedTransaksi($statuses);
+        }
+
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        return $this->scopedTransaksi($statuses)->whereIn('id_transaksijs', $validated['ids']);
+    }
+
+    private function scopedTransaksi(array $statuses)
+    {
+        $query = transaksijs::whereIn('status_js', $statuses);
+
+        if (auth()->user()->role != 'superadmin') {
+            $query->where('id_kc_js', auth()->user()->id_kecamatan_user);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Credits the customer's saldo exactly once: the row lock plus the status check make a
+     * repeated request (double-click, refresh, retry) a no-op, and the transaction keeps the
+     * status change, saldo and topup log all-or-nothing.
+     */
+    private function completeTransaksi($id, bool $scopeToKecamatan = false): bool
+    {
+        return DB::transaction(function () use ($id, $scopeToKecamatan) {
+            $tjs = transaksijs::whereKey($id)->lockForUpdate()->first();
+
+            if (! $tjs || $tjs->status_js != 'sedang diproses') {
+                return false;
+            }
+
+            if ($scopeToKecamatan && auth()->user()->role != 'superadmin'
+                && $tjs->id_kc_js != auth()->user()->id_kecamatan_user) {
+                return false;
+            }
+
+            $customer = Customer::withTrashed()->whereKey($tjs->id_cs_js)->lockForUpdate()->firstOrFail();
+
+            $tjs->status_js = 'selesai';
+            $tjs->save();
+
+            $customer->saldo_customer = $customer->saldo_customer + $tjs->total_js;
+            $customer->save();
+
+            $topup = new topup;
+            $topup->nama_customer_topup = $customer->nama;
+            $topup->id_kecamatan_topup = $tjs->id_kc_js;
+            $topup->tanggal_topup = Carbon::now();
+            $topup->nominal_topup = $tjs->total_js;
+            $topup->total_saldo_topup = $customer->saldo_customer;
+            $topup->save();
+
+            return true;
+        });
     }
 
     public function totaljualsampah()
